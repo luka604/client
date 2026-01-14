@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="prosecnaOcena" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+
+    <parameter name="predmetNaziv" class="java.lang.String"/>
+    <parameter name="godinaOd" class="java.lang.String"/>
+    <parameter name="godinaDo" class="java.lang.String"/>
+    <parameter name="prosecnaOcena" class="java.lang.String"/>
+    <parameter name="brojStudenata" class="java.lang.String"/>
+
+    <field name="ocena" class="java.lang.Integer"/>
+    <field name="brojStudenata" class="java.lang.Long"/>
+
+    <title>
+        <band height="120">
+            <staticText>
+                <reportElement x="0" y="0" width="555" height="30"/>
+                <textElement textAlignment="Center">
+                    <font size="18" isBold="true"/>
+                </textElement>
+                <text><![CDATA[IZVESTAJ O PROSECNOJ OCENI NA PREDMETU]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="0" y="40" width="100" height="20"/>
+                <textElement>
+                    <font size="12" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Predmet:]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="100" y="40" width="455" height="20"/>
+                <textElement>
+                    <font size="12"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{predmetNaziv}]]></textFieldExpression>
+            </textField>
+            <staticText>
+                <reportElement x="0" y="60" width="100" height="20"/>
+                <textElement>
+                    <font size="12" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Period:]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="100" y="60" width="455" height="20"/>
+                <textElement>
+                    <font size="12"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{godinaOd} + " - " + $P{godinaDo}]]></textFieldExpression>
+            </textField>
+            <staticText>
+                <reportElement x="0" y="80" width="150" height="20"/>
+                <textElement>
+                    <font size="12" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Prosecna ocena:]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="150" y="80" width="100" height="20"/>
+                <textElement>
+                    <font size="12"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{prosecnaOcena}]]></textFieldExpression>
+            </textField>
+            <staticText>
+                <reportElement x="270" y="80" width="150" height="20"/>
+                <textElement>
+                    <font size="12" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Broj studenata:]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="420" y="80" width="135" height="20"/>
+                <textElement>
+                    <font size="12"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{brojStudenata}]]></textFieldExpression>
+            </textField>
+        </band>
+    </title>
+
+    <columnHeader>
+        <band height="30">
+            <staticText>
+                <reportElement x="0" y="0" width="277" height="30" mode="Opaque" backcolor="#CCCCCC"/>
+                <box>
+                    <pen lineWidth="1.0"/>
+                </box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="12" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Ocena]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="277" y="0" width="278" height="30" mode="Opaque" backcolor="#CCCCCC"/>
+                <box>
+                    <pen lineWidth="1.0"/>
+                </box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="12" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Broj studenata]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+
+    <detail>
+        <band height="25">
+            <textField>
+                <reportElement x="0" y="0" width="277" height="25"/>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="11"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{ocena}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="277" y="0" width="278" height="25"/>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="11"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{brojStudenata}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+
+    <pageFooter>
+        <band height="30">
+            <textField>
+                <reportElement x="435" y="10" width="120" height="20"/>
+                <textElement textAlignment="Right">
+                    <font size="10"/>
+                </textElement>
+                <textFieldExpression><![CDATA["Strana " + $V{PAGE_NUMBER}]]></textFieldExpression>
+            </textField>
+        </band>
+    </pageFooter>
+</jasperReport>

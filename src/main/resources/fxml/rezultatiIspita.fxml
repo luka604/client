@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.control.ComboBox?>
+
+<BorderPane fx:id="rezultatiPane" prefHeight="600" prefWidth="800" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.raflab.studsluzbadesktopclient.controllers.RezultatiIspitaController">
+    <top>
+        <fx:include source="menuBar.fxml"/>
+    </top>
+    <center>
+        <VBox spacing="15">
+            <padding>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+            </padding>
+
+            <Label text="Rezultati ispita" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Ispitni rok:"/>
+                <ComboBox fx:id="ispitniRokCombo" prefWidth="250" onAction="#handleIspitniRokSelected"/>
+                <Label text="Ispit:"/>
+                <ComboBox fx:id="ispitCombo" prefWidth="250" onAction="#handleIspitSelected"/>
+            </HBox>
+
+            <Label fx:id="lblIspitInfo" text="" style="-fx-font-size: 14px;"/>
+
+            <TableView fx:id="tabelaRezultati" minHeight="300" prefWidth="750">
+                <columns>
+                    <TableColumn fx:id="brojIndeksaColumn" prefWidth="100" text="Broj indeksa">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="brojIndeksa"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="imeColumn" prefWidth="100" text="Ime">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="ime"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="prezimeColumn" prefWidth="100" text="Prezime">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="prezime"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="predispitniColumn" prefWidth="100" text="Predispitni">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="predispitniPoeni"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="ispitColumn" prefWidth="100" text="Ispit">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="poeniNaIspitu"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="ukupnoColumn" prefWidth="80" text="Ukupno">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="ukupniPoeni"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="ocenaColumn" prefWidth="70" text="Ocena">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="ocena"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="polozenColumn" prefWidth="80" text="Polozen">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="polozen"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                </columns>
+            </TableView>
+
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Button fx:id="btnStampaj" onAction="#handleStampajZapisnik" text="Stampaj zapisnik"/>
+                <Label fx:id="statusLabel" style="-fx-text-fill: green;"/>
+            </HBox>
+        </VBox>
+    </center>
+</BorderPane>

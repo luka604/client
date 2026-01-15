@@ -9,6 +9,7 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Separator?>
 
 <VBox spacing="15" xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.raflab.studsluzbadesktopclient.controllers.PrijavljeniStudentiController">
@@ -18,24 +19,24 @@
 
     <Label fx:id="lblNaslov" text="Prijavljeni studenti za ispit" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
 
-    <TableView fx:id="tabelaPrijavljeni" prefHeight="300" prefWidth="500">
+    <TableView fx:id="tabelaPrijavljeni" prefHeight="250" prefWidth="550">
         <columns>
             <TableColumn fx:id="brojIndeksaColumn" prefWidth="120" text="Broj indeksa">
                 <cellValueFactory>
                     <PropertyValueFactory property="brojIndeksa"/>
                 </cellValueFactory>
             </TableColumn>
-            <TableColumn fx:id="imeColumn" prefWidth="120" text="Ime">
+            <TableColumn fx:id="imeColumn" prefWidth="100" text="Ime">
                 <cellValueFactory>
                     <PropertyValueFactory property="ime"/>
                 </cellValueFactory>
             </TableColumn>
-            <TableColumn fx:id="prezimeColumn" prefWidth="120" text="Prezime">
+            <TableColumn fx:id="prezimeColumn" prefWidth="100" text="Prezime">
                 <cellValueFactory>
                     <PropertyValueFactory property="prezime"/>
                 </cellValueFactory>
             </TableColumn>
-            <TableColumn fx:id="datumPrijaveColumn" prefWidth="120" text="Datum prijave">
+            <TableColumn fx:id="datumPrijaveColumn" prefWidth="110" text="Datum prijave">
                 <cellValueFactory>
                     <PropertyValueFactory property="datumPrijave"/>
                 </cellValueFactory>
@@ -48,6 +49,17 @@
         <Label text="Broj indeksa:"/>
         <TextField fx:id="brojIndeksaTf" prefWidth="150"/>
         <Button onAction="#handlePrijaviStudenta" text="Prijavi"/>
+    </HBox>
+
+    <Separator/>
+
+    <Label text="Unos izlaska na ispit (za selektovanog studenta):" style="-fx-font-weight: bold;"/>
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Broj poena:"/>
+        <TextField fx:id="brojPoenaTf" prefWidth="80"/>
+        <Label text="Napomena:"/>
+        <TextField fx:id="napomenaTf" prefWidth="150"/>
+        <Button onAction="#handleUnosIzlaska" text="Unesi izlazak"/>
     </HBox>
 
     <Label fx:id="statusLabel" style="-fx-text-fill: green;"/>

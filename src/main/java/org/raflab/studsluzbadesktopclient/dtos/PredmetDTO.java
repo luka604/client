@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PredmetDTO {
+    private Long id;
     private String sifra;
     private String naziv;
     private String opis;

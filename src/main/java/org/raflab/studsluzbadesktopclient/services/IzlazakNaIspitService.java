@@ -1,6 +1,7 @@
 package org.raflab.studsluzbadesktopclient.services;
 
 import lombok.AllArgsConstructor;
+import org.raflab.studsluzbadesktopclient.dtos.BrojPolaganjaDTO;
 import org.raflab.studsluzbadesktopclient.dtos.IzlazakNaIspitDTO;
 import org.raflab.studsluzbadesktopclient.dtos.IzlazakNaIspitRequestDTO;
 import org.springframework.stereotype.Service;
@@ -32,12 +33,20 @@ public class IzlazakNaIspitService {
                 .bodyToMono(IzlazakNaIspitDTO.class);
     }
 
-    public Integer getBrojPolaganja(String brojIndeksa, Long predmetId) {
+    public BrojPolaganjaDTO getBrojPolaganja(String brojIndeksa, String predmetSifra) {
         return webClient
                 .get()
-                .uri("/api/izlazak/broj-polaganja?brojIndeksa=" + brojIndeksa + "&predmetId=" + predmetId)
+                .uri("/api/izlazak/broj-polaganja?brojIndeksa=" + brojIndeksa + "&predmetId=" + predmetSifra)
                 .retrieve()
-                .bodyToMono(Integer.class)
+                .bodyToMono(BrojPolaganjaDTO.class)
                 .block();
+    }
+
+    public Mono<BrojPolaganjaDTO> getBrojPolaganjaAsync(String brojIndeksa, String predmetSifra) {
+        return webClient
+                .get()
+                .uri("/api/izlazak/broj-polaganja?brojIndeksa=" + brojIndeksa + "&predmetId=" + predmetSifra)
+                .retrieve()
+                .bodyToMono(BrojPolaganjaDTO.class);
     }
 }

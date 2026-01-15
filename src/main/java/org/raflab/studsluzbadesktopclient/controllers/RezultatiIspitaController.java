@@ -10,6 +10,7 @@ import net.sf.jasperreports.view.JasperViewer;
 import org.raflab.studsluzbadesktopclient.MainView;
 import org.raflab.studsluzbadesktopclient.dtos.IspitDTO;
 import org.raflab.studsluzbadesktopclient.dtos.IspitniRokDTO;
+import org.raflab.studsluzbadesktopclient.dtos.ProsecnaOcenaDTO;
 import org.raflab.studsluzbadesktopclient.dtos.RezultatIspitaDTO;
 import org.raflab.studsluzbadesktopclient.services.IspitService;
 import org.raflab.studsluzbadesktopclient.services.IspitniRokService;
@@ -46,6 +47,9 @@ public class RezultatiIspitaController {
 
     @FXML
     private Label statusLabel;
+
+    @FXML
+    private Label lblProsecnaOcena;
 
     private List<RezultatIspitaDTO> currentRezultati;
     private IspitDTO currentIspit;
@@ -151,6 +155,33 @@ public class RezultatiIspitaController {
         IspitDTO selectedIspit = ispitCombo.getValue();
         if (selectedIspit != null) {
             loadRezultati(selectedIspit.getId());
+        }
+    }
+
+    @FXML
+    public void handlePrikaziProsecnuOcenu() {
+        IspitDTO selectedIspit = ispitCombo.getValue();
+        if (selectedIspit == null) {
+            showError("Molimo izaberite ispit.");
+            return;
+        }
+
+        try {
+            ProsecnaOcenaDTO prosecna = ispitService.getProsecnaOcena(selectedIspit.getId());
+            StringBuilder sb = new StringBuilder();
+            sb.append("Prosecna ocena: ").append(String.format("%.2f", prosecna.getProsecnaOcena()));
+            sb.append(" | Broj studenata koji su polozili: ").append(prosecna.getBrojStudenata());
+
+            if (prosecna.getDistribucijaOcena() != null && !prosecna.getDistribucijaOcena().isEmpty()) {
+                sb.append(" | Distribucija: ");
+                prosecna.getDistribucijaOcena().forEach((ocena, broj) ->
+                        sb.append("Ocena ").append(ocena).append(": ").append(broj).append(" | "));
+            }
+
+            lblProsecnaOcena.setText(sb.toString());
+            lblProsecnaOcena.setStyle("-fx-text-fill: blue; -fx-font-size: 14px; -fx-font-weight: bold;");
+        } catch (Exception e) {
+            showError("Greska pri ucitavanju prosecne ocene: " + e.getMessage());
         }
     }
 

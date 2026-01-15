@@ -4,15 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class StudentPrijavaDTO {
-    private Long prijavaId;
+public class BrojPolaganjaDTO {
     private String brojIndeksa;
-    private String ime;
-    private String prezime;
-    private LocalDate datumPrijave;
+    private String predmetNaziv;
+    private Integer brojPolaganja;
+    private List<DetaljiPolaganjaDTO> detaljiPolaganja;
 }

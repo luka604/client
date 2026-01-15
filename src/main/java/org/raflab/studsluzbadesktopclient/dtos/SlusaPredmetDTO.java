@@ -4,23 +4,17 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class IspitDTO {
+public class SlusaPredmetDTO {
     private Long id;
-    private LocalDate datumOdrzavanja;
-    private LocalTime vremePocetka;
-    private Boolean zakljucan;
-    private String ispitniRokName;
+    private String brojIndeksa;
     private String predmetNaziv;
     private String predmetSifra;
 
     @Override
     public String toString() {
-        return predmetNaziv + " - " + datumOdrzavanja + " " + vremePocetka;
+        return predmetSifra + " - " + predmetNaziv;
     }
 }

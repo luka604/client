@@ -80,8 +80,11 @@
 
             <HBox spacing="10" alignment="CENTER_LEFT">
                 <Button fx:id="btnStampaj" onAction="#handleStampajZapisnik" text="Stampaj zapisnik"/>
+                <Button onAction="#handlePrikaziProsecnuOcenu" text="Prikazi prosecnu ocenu"/>
                 <Label fx:id="statusLabel" style="-fx-text-fill: green;"/>
             </HBox>
+
+            <Label fx:id="lblProsecnaOcena" text="" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
         </VBox>
     </center>
 </BorderPane>

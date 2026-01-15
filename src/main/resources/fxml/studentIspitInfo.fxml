@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Separator?>
+
+<VBox spacing="15" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.raflab.studsluzbadesktopclient.controllers.StudentIspitInfoController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+    </padding>
+
+    <Label text="Informacije o studentu i ispitu" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Broj indeksa:"/>
+        <TextField fx:id="brojIndeksaTf" prefWidth="150"/>
+        <Label text="Predmet:"/>
+        <ComboBox fx:id="predmetCombo" prefWidth="200"/>
+    </HBox>
+
+    <Separator/>
+
+    <Label text="Predispitne obaveze:" style="-fx-font-weight: bold;"/>
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Skolska godina:"/>
+        <ComboBox fx:id="skolskaGodinaCombo" prefWidth="150"/>
+        <Button onAction="#handlePrikaziPredispitne" text="Prikazi predispitne poene"/>
+    </HBox>
+
+    <TableView fx:id="tabelaPredispitne" prefHeight="150" prefWidth="500">
+        <columns>
+            <TableColumn fx:id="vrstaColumn" prefWidth="200" text="Vrsta obaveze">
+                <cellValueFactory>
+                    <PropertyValueFactory property="vrstaObaveze"/>
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="maxColumn" prefWidth="100" text="Max poena">
+                <cellValueFactory>
+                    <PropertyValueFactory property="maxPoena"/>
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="osvojenoColumn" prefWidth="100" text="Osvojeno">
+                <cellValueFactory>
+                    <PropertyValueFactory property="osvojeniPoeni"/>
+                </cellValueFactory>
+            </TableColumn>
+        </columns>
+    </TableView>
+
+    <Label fx:id="lblUkupnoPredispitni" text="" style="-fx-font-weight: bold;"/>
+
+    <Separator/>
+
+    <Label text="Broj polaganja predmeta:" style="-fx-font-weight: bold;"/>
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Button onAction="#handlePrikaziBrojPolaganja" text="Prikazi broj polaganja"/>
+    </HBox>
+
+    <Label fx:id="lblBrojPolaganja" text="" style="-fx-font-size: 14px;"/>
+
+    <TableView fx:id="tabelaPolaganja" prefHeight="120" prefWidth="500">
+        <columns>
+            <TableColumn fx:id="datumColumn" prefWidth="150" text="Datum ispita">
+                <cellValueFactory>
+                    <PropertyValueFactory property="datumIspita"/>
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="poeniColumn" prefWidth="100" text="Osvojeni poeni">
+                <cellValueFactory>
+                    <PropertyValueFactory property="osvojeniPoeni"/>
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="ponistenColumn" prefWidth="100" text="Ponisteno">
+                <cellValueFactory>
+                    <PropertyValueFactory property="ponisteno"/>
+                </cellValueFactory>
+            </TableColumn>
+        </columns>
+    </TableView>
+
+    <Label fx:id="statusLabel" style="-fx-text-fill: green;"/>
+
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button onAction="#handleZatvori" text="Zatvori"/>
+    </HBox>
+</VBox>

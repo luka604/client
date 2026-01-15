@@ -53,6 +53,22 @@ public class MenuBarController {
 		mainView.changeRoot("rezultatiIspita");
 	}
 
+	public void openStudentIspitInfo() {
+		mainView.openModal("studentIspitInfo", "Informacije o studentu i ispitu", 600, 650);
+	}
+
+	public void openUpisPredmeta() {
+		mainView.changeRoot("upisPredmeta");
+	}
+
+	public void openStudentProfil() {
+		mainView.changeRoot("studentProfil");
+	}
+
+	public void openPretragaStudenata() {
+		mainView.changeRoot("pretragaStudenata");
+	}
+
 	@FXML
     public void initialize() {
 

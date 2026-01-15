@@ -19,10 +19,12 @@
             </Menu>
             <Menu text="Studenti">
                 <items>
-                    <MenuItem onAction="#openSearchStudent" text="Pretraži" />   
+                    <MenuItem onAction="#openStudentProfil" text="Profil studenta" />
+                    <MenuItem onAction="#openPretragaStudenata" text="Pretraga studenata" />
+                    <MenuItem onAction="#openSearchStudent" text="Pretraži (staro)" />
                     <MenuItem onAction="#openNewStudent" text="Novi" />
                     <MenuItem text="Grupe" />
-                </items>                           
+                </items>
             </Menu>
             <Menu text="Nastavnici">
                 <items>
@@ -44,14 +46,16 @@
                     <MenuItem onAction="#openIspiti" text="Ispiti - unos" />
                     <MenuItem onAction="#openIspiti" text="Ispiti - prijave" />
                     <MenuItem onAction="#openRezultatiIspita" text="Ispiti - rezultati" />
+                    <MenuItem onAction="#openStudentIspitInfo" text="Info o studentu i ispitu" />
                 </items>
             </Menu>
             <Menu text="Administracija">
                 <items>
-                    <MenuItem text="Šifarnici" />               
+                    <MenuItem onAction="#openUpisPredmeta" text="Upis studenta na predmet" />
+                    <MenuItem text="Šifarnici" />
                     <MenuItem text="Školske godine"  />
                     <MenuItem text="Korisnici" />
-                </items>                          
+                </items>
             </Menu>
         </MenuBar>
 </VBox>

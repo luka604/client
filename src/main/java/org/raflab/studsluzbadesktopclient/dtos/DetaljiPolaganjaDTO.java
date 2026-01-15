@@ -9,10 +9,8 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class StudentPrijavaDTO {
-    private Long prijavaId;
-    private String brojIndeksa;
-    private String ime;
-    private String prezime;
-    private LocalDate datumPrijave;
+public class DetaljiPolaganjaDTO {
+    private LocalDate datumIspita;
+    private Integer osvojeniPoeni;
+    private Boolean ponisteno;
 }

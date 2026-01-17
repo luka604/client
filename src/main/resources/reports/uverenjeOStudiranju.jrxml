@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="uverenjeOStudiranju" pageWidth="595" pageHeight="842" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="50" bottomMargin="50">
+
+    <parameter name="studentIme" class="java.lang.String"/>
+    <parameter name="studentPrezime" class="java.lang.String"/>
+    <parameter name="studentSrednjeIme" class="java.lang.String"/>
+    <parameter name="brojIndeksa" class="java.lang.String"/>
+    <parameter name="studijskiProgram" class="java.lang.String"/>
+    <parameter name="godinaStudija" class="java.lang.String"/>
+    <parameter name="skolskaGodina" class="java.lang.String"/>
+    <parameter name="datumIzdavanja" class="java.lang.String"/>
+    <parameter name="ukupnoEspb" class="java.lang.Integer"/>
+
+    <title>
+        <band height="680">
+            <!-- Header - University info -->
+            <staticText>
+                <reportElement x="0" y="0" width="515" height="25"/>
+                <textElement textAlignment="Center">
+                    <font size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[UNIVERZITET UNION]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="0" y="25" width="515" height="20"/>
+                <textElement textAlignment="Center">
+                    <font size="12" isBold="true"/>
+                </textElement>
+                <text><![CDATA[RACUNARSKI FAKULTET]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="0" y="45" width="515" height="15"/>
+                <textElement textAlignment="Center">
+                    <font size="10"/>
+                </textElement>
+                <text><![CDATA[Knez Mihailova 6, 11000 Beograd]]></text>
+            </staticText>
+
+            <line>
+                <reportElement x="0" y="70" width="515" height="1"/>
+            </line>
+
+            <!-- Document title -->
+            <staticText>
+                <reportElement x="0" y="100" width="515" height="35"/>
+                <textElement textAlignment="Center">
+                    <font size="22" isBold="true"/>
+                </textElement>
+                <text><![CDATA[UVERENJE O STUDIRANJU]]></text>
+            </staticText>
+
+            <!-- Document number placeholder -->
+            <staticText>
+                <reportElement x="0" y="145" width="515" height="20"/>
+                <textElement textAlignment="Center">
+                    <font size="10" isItalic="true"/>
+                </textElement>
+                <text><![CDATA[Broj: ____________________]]></text>
+            </staticText>
+
+            <!-- Main content -->
+            <staticText>
+                <reportElement x="0" y="190" width="515" height="20"/>
+                <textElement>
+                    <font size="12"/>
+                </textElement>
+                <text><![CDATA[Ovim se potvrdjuje da je student/kinja:]]></text>
+            </staticText>
+
+            <!-- Student name -->
+            <textField>
+                <reportElement x="0" y="220" width="515" height="30"/>
+                <textElement textAlignment="Center">
+                    <font size="16" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{studentIme} + " (" + ($P{studentSrednjeIme} != null ? $P{studentSrednjeIme} : "-") + ") " + $P{studentPrezime}]]></textFieldExpression>
+            </textField>
+
+            <!-- Index number -->
+            <staticText>
+                <reportElement x="0" y="260" width="150" height="20"/>
+                <textElement>
+                    <font size="12"/>
+                </textElement>
+                <text><![CDATA[Broj indeksa:]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="150" y="260" width="365" height="20"/>
+                <textElement>
+                    <font size="12" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{brojIndeksa}]]></textFieldExpression>
+            </textField>
+
+            <!-- Study program -->
+            <staticText>
+                <reportElement x="0" y="290" width="150" height="20"/>
+                <textElement>
+                    <font size="12"/>
+                </textElement>
+                <text><![CDATA[Studijski program:]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="150" y="290" width="365" height="20"/>
+                <textElement>
+                    <font size="12" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{studijskiProgram} != null ? $P{studijskiProgram} : "Informatika i racunarstvo"]]></textFieldExpression>
+            </textField>
+
+            <!-- Year of study -->
+            <staticText>
+                <reportElement x="0" y="320" width="150" height="20"/>
+                <textElement>
+                    <font size="12"/>
+                </textElement>
+                <text><![CDATA[Godina studija:]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="150" y="320" width="365" height="20"/>
+                <textElement>
+                    <font size="12" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{godinaStudija}]]></textFieldExpression>
+            </textField>
+
+            <!-- School year -->
+            <staticText>
+                <reportElement x="0" y="350" width="150" height="20"/>
+                <textElement>
+                    <font size="12"/>
+                </textElement>
+                <text><![CDATA[Skolska godina:]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="150" y="350" width="365" height="20"/>
+                <textElement>
+                    <font size="12" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{skolskaGodina}]]></textFieldExpression>
+            </textField>
+
+            <!-- ESPB -->
+            <staticText>
+                <reportElement x="0" y="380" width="150" height="20"/>
+                <textElement>
+                    <font size="12"/>
+                </textElement>
+                <text><![CDATA[Ostvareno ESPB:]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="150" y="380" width="365" height="20"/>
+                <textElement>
+                    <font size="12" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{ukupnoEspb} != null ? $P{ukupnoEspb}.toString() : "0"]]></textFieldExpression>
+            </textField>
+
+            <!-- Status confirmation -->
+            <staticText>
+                <reportElement x="0" y="420" width="515" height="40"/>
+                <textElement textAlignment="Justified">
+                    <font size="12"/>
+                </textElement>
+                <text><![CDATA[upisana/upisan na Racunarski fakultet Univerziteta Union u Beogradu i da ima status redovnog studenta.]]></text>
+            </staticText>
+
+            <!-- Purpose -->
+            <staticText>
+                <reportElement x="0" y="470" width="515" height="20"/>
+                <textElement>
+                    <font size="11"/>
+                </textElement>
+                <text><![CDATA[Uverenje se izdaje radi podnošenja nadležnom organu.]]></text>
+            </staticText>
+
+            <!-- Date and place -->
+            <staticText>
+                <reportElement x="0" y="520" width="100" height="20"/>
+                <textElement>
+                    <font size="11"/>
+                </textElement>
+                <text><![CDATA[U Beogradu,]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="100" y="520" width="150" height="20"/>
+                <textElement>
+                    <font size="11"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{datumIzdavanja}]]></textFieldExpression>
+            </textField>
+
+            <!-- Signatures -->
+            <staticText>
+                <reportElement x="0" y="580" width="200" height="20"/>
+                <textElement textAlignment="Center">
+                    <font size="10"/>
+                </textElement>
+                <text><![CDATA[M.P.]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement x="315" y="560" width="200" height="15"/>
+                <textElement textAlignment="Center">
+                    <font size="10"/>
+                </textElement>
+                <text><![CDATA[Studentska sluzba]]></text>
+            </staticText>
+            <line>
+                <reportElement x="315" y="610" width="200" height="1"/>
+            </line>
+            <staticText>
+                <reportElement x="315" y="615" width="200" height="15"/>
+                <textElement textAlignment="Center">
+                    <font size="9" isItalic="true"/>
+                </textElement>
+                <text><![CDATA[(potpis ovlascenog lica)]]></text>
+            </staticText>
+
+            <!-- Footer -->
+            <staticText>
+                <reportElement x="0" y="660" width="515" height="15"/>
+                <textElement textAlignment="Center">
+                    <font size="8" isItalic="true"/>
+                </textElement>
+                <text><![CDATA[Racunarski fakultet - Univerzitet Union - Studentska sluzba]]></text>
+            </staticText>
+        </band>
+    </title>
+</jasperReport>

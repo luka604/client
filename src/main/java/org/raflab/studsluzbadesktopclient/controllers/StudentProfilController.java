@@ -5,13 +5,19 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.raflab.studsluzbadesktopclient.dtos.*;
 import org.raflab.studsluzbadesktopclient.services.*;
 import org.springframework.stereotype.Component;
 
+import java.awt.Desktop;
+import java.io.File;
+import java.io.InputStream;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -33,6 +39,7 @@ public class StudentProfilController {
     private static final int PAGE_SIZE = 10;
 
     private List<PredmetDTO> allPredmeti = new ArrayList<>();
+    private StudentPodaciDTO currentStudentData;
 
     @FXML private TextField brojIndeksaTf;
     @FXML private Label statusLabel;
@@ -143,6 +150,7 @@ public class StudentProfilController {
         studentPodaciService.getStudentByBrojIndeksaAsync(currentBrojIndeksa)
                 .subscribe(
                         student -> Platform.runLater(() -> {
+                            currentStudentData = student;
                             lblIme.setText(student.getIme() != null ? student.getIme() : "-");
                             lblPrezime.setText(student.getPrezime() != null ? student.getPrezime() : "-");
                             lblSrednjeIme.setText(student.getSrednjeIme() != null ? student.getSrednjeIme() : "-");
@@ -156,6 +164,7 @@ public class StudentProfilController {
                             statusLabel.setStyle("-fx-text-fill: green;");
                         }),
                         error -> Platform.runLater(() -> {
+                            currentStudentData = null;
                             statusLabel.setText("Greska: " + error.getMessage());
                             statusLabel.setStyle("-fx-text-fill: red;");
                         })
@@ -410,5 +419,158 @@ public class StudentProfilController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    @FXML
+    public void handleGenerisiUverenjeOStudiranju() {
+        if (currentBrojIndeksa == null || currentStudentData == null) {
+            showError("Prvo ucitajte studenta.");
+            return;
+        }
+
+        try {
+            InputStream reportStream = getClass().getResourceAsStream("/reports/uverenjeOStudiranju.jrxml");
+            if (reportStream == null) {
+                showError("Sablon izvestaja nije pronadjen.");
+                return;
+            }
+
+            JasperReport jasperReport = JasperCompileManager.compileReport(reportStream);
+
+            Map<String, Object> parameters = new HashMap<>();
+            parameters.put("studentIme", currentStudentData.getIme());
+            parameters.put("studentPrezime", currentStudentData.getPrezime());
+            parameters.put("studentSrednjeIme", currentStudentData.getSrednjeIme());
+            parameters.put("brojIndeksa", currentBrojIndeksa);
+            parameters.put("studijskiProgram", "Informatika i racunarstvo");
+            parameters.put("godinaStudija", getGodinaStudijaFromUpisaneGodine());
+            parameters.put("skolskaGodina", getSkolskaGodina());
+            parameters.put("datumIzdavanja", LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy.")));
+            parameters.put("ukupnoEspb", calculateTotalEspb());
+
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
+
+            String fileName = "uverenje_o_studiranju_" + currentBrojIndeksa.replace("/", "_") + ".pdf";
+            File pdfFile = new File(System.getProperty("java.io.tmpdir"), fileName);
+            JasperExportManager.exportReportToPdfFile(jasperPrint, pdfFile.getAbsolutePath());
+
+            if (Desktop.isDesktopSupported()) {
+                Desktop.getDesktop().open(pdfFile);
+            }
+
+            statusLabel.setText("Uverenje o studiranju generisano: " + pdfFile.getName());
+            statusLabel.setStyle("-fx-text-fill: green;");
+
+        } catch (JRException e) {
+            showError("Greska pri generisanju uverenja: " + e.getMessage());
+        } catch (Exception e) {
+            showError("Greska pri otvaranju PDF-a: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    public void handleGenerisiUverenjePolozeniIspiti() {
+        if (currentBrojIndeksa == null || currentStudentData == null) {
+            showError("Prvo ucitajte studenta.");
+            return;
+        }
+
+        try {
+            List<PolozeniPredmetDTO> polozeniIspiti = polozeniPredmetService.getAllPolozeniIspiti(currentBrojIndeksa);
+
+            if (polozeniIspiti == null || polozeniIspiti.isEmpty()) {
+                showError("Student nema polozenih ispita.");
+                return;
+            }
+
+            List<PolozeniPredmetReportDTO> reportData = polozeniIspiti.stream()
+                    .map(PolozeniPredmetReportDTO::fromPolozeniPredmetDTO)
+                    .sorted(Comparator.comparing(PolozeniPredmetReportDTO::getGodinaStudija)
+                            .thenComparing(p -> p.getPredmetNaziv() != null ? p.getPredmetNaziv() : ""))
+                    .collect(Collectors.toList());
+
+            InputStream reportStream = getClass().getResourceAsStream("/reports/uverenjePolozeniIspiti.jrxml");
+            if (reportStream == null) {
+                showError("Sablon izvestaja nije pronadjen.");
+                return;
+            }
+
+            JasperReport jasperReport = JasperCompileManager.compileReport(reportStream);
+
+            int ukupnoEspb = reportData.stream()
+                    .mapToInt(p -> p.getEspb() != null ? p.getEspb() : 0)
+                    .sum();
+
+            double prosecnaOcena = reportData.stream()
+                    .filter(p -> p.getOcena() != null && p.getOcena() >= 6)
+                    .mapToInt(PolozeniPredmetReportDTO::getOcena)
+                    .average()
+                    .orElse(0.0);
+
+            Map<String, Object> parameters = new HashMap<>();
+            parameters.put("studentIme", currentStudentData.getIme());
+            parameters.put("studentPrezime", currentStudentData.getPrezime());
+            parameters.put("studentSrednjeIme", currentStudentData.getSrednjeIme());
+            parameters.put("brojIndeksa", currentBrojIndeksa);
+            parameters.put("studijskiProgram", "Informatika i racunarstvo");
+            parameters.put("datumIzdavanja", LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy.")));
+            parameters.put("ukupnoEspb", ukupnoEspb);
+            parameters.put("prosecnaOcena", prosecnaOcena);
+
+            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(reportData);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+
+            String fileName = "uverenje_polozeni_ispiti_" + currentBrojIndeksa.replace("/", "_") + ".pdf";
+            File pdfFile = new File(System.getProperty("java.io.tmpdir"), fileName);
+            JasperExportManager.exportReportToPdfFile(jasperPrint, pdfFile.getAbsolutePath());
+
+            if (Desktop.isDesktopSupported()) {
+                Desktop.getDesktop().open(pdfFile);
+            }
+
+            statusLabel.setText("Uverenje o polozenim ispitima generisano: " + pdfFile.getName());
+            statusLabel.setStyle("-fx-text-fill: green;");
+
+        } catch (JRException e) {
+            showError("Greska pri generisanju uverenja: " + e.getMessage());
+        } catch (Exception e) {
+            showError("Greska pri ucitavanju podataka: " + e.getMessage());
+        }
+    }
+
+    private String getGodinaStudijaFromUpisaneGodine() {
+        if (listaUpisaneGodine.getItems() != null && !listaUpisaneGodine.getItems().isEmpty()) {
+            int maxGodina = listaUpisaneGodine.getItems().stream()
+                    .mapToInt(UpisGodineDTO::getGodinaKojuUpisuje)
+                    .max()
+                    .orElse(1);
+            return maxGodina + ". godina";
+        }
+        return "1. godina";
+    }
+
+    private String getSkolskaGodina() {
+        int currentYear = LocalDate.now().getYear();
+        int month = LocalDate.now().getMonthValue();
+        if (month >= 10) {
+            return currentYear + "/" + (currentYear + 1);
+        } else {
+            return (currentYear - 1) + "/" + currentYear;
+        }
+    }
+
+    private Integer calculateTotalEspb() {
+        try {
+            List<PolozeniPredmetDTO> polozeniIspiti = polozeniPredmetService.getAllPolozeniIspiti(currentBrojIndeksa);
+            if (polozeniIspiti != null) {
+                return polozeniIspiti.stream()
+                        .filter(p -> p.getPredmet() != null && p.getPredmet().getEspb() != null)
+                        .mapToInt(p -> p.getPredmet().getEspb())
+                        .sum();
+            }
+        } catch (Exception e) {
+            // ignore
+        }
+        return 0;
     }
 }

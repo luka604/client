@@ -6,7 +6,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.view.JasperViewer;
 import org.raflab.studsluzbadesktopclient.MainView;
 import org.raflab.studsluzbadesktopclient.dtos.IspitDTO;
 import org.raflab.studsluzbadesktopclient.dtos.IspitniRokDTO;
@@ -16,6 +15,8 @@ import org.raflab.studsluzbadesktopclient.services.IspitService;
 import org.raflab.studsluzbadesktopclient.services.IspitniRokService;
 import org.springframework.stereotype.Component;
 
+import java.awt.Desktop;
+import java.io.File;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -210,13 +211,22 @@ public class RezultatiIspitaController {
 
             JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(currentRezultati);
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
-            JasperViewer.viewReport(jasperPrint, false);
 
-            statusLabel.setText("Zapisnik generisan!");
+            String fileName = "zapisnik_" + currentIspit.getPredmetNaziv().replaceAll("[^a-zA-Z0-9]", "_") + ".pdf";
+            File pdfFile = new File(System.getProperty("java.io.tmpdir"), fileName);
+            JasperExportManager.exportReportToPdfFile(jasperPrint, pdfFile.getAbsolutePath());
+
+            if (Desktop.isDesktopSupported()) {
+                Desktop.getDesktop().open(pdfFile);
+            }
+
+            statusLabel.setText("Zapisnik generisan: " + pdfFile.getName());
             statusLabel.setStyle("-fx-text-fill: green;");
 
         } catch (JRException e) {
             showError("Greska pri generisanju zapisnika: " + e.getMessage());
+        } catch (Exception e) {
+            showError("Greska pri otvaranju PDF-a: " + e.getMessage());
         }
     }
 

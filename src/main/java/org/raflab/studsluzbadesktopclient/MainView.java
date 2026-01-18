@@ -112,37 +112,12 @@ public class MainView {
         }
     }
 
-    public Node loadPane(String fxml) {
-        FXMLLoader loader = appFXMLLoader.getLoader(MainView.class.getResource("/fxml/" + fxml + ".fxml"));
-        try {
-            return loader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
     public void openModal(String fxml) {
         FXMLLoader loader = appFXMLLoader.getLoader(MainView.class.getResource("/fxml/" + fxml + ".fxml"));
         try {
             Parent parent = loader.load();
             Scene modalScene = new Scene(parent, 400, 300);
             Stage stage = new Stage();
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setScene(modalScene);
-            stage.showAndWait();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void openModal(String fxml, String title) {
-        FXMLLoader loader = appFXMLLoader.getLoader(MainView.class.getResource("/fxml/" + fxml + ".fxml"));
-        try {
-            Parent parent = loader.load();
-            Scene modalScene = new Scene(parent, 400, 300);
-            Stage stage = new Stage();
-            stage.setTitle(title);
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(modalScene);
             stage.showAndWait();
@@ -166,15 +141,4 @@ public class MainView {
         }
     }
 
-    public boolean canGoBack() {
-        return navigationHistory.canGoBack();
-    }
-
-    public boolean canGoForward() {
-        return navigationHistory.canGoForward();
-    }
-
-    public NavigationHistory getNavigationHistory() {
-        return navigationHistory;
-    }
 }

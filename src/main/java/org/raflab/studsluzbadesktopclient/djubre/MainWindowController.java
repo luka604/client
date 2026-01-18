@@ -1,4 +1,4 @@
-package org.raflab.studsluzbadesktopclient.controllers;
+package org.raflab.studsluzbadesktopclient.djubre;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -9,9 +9,9 @@ import javafx.scene.layout.BorderPane;
 
 @Component
 public class MainWindowController {
-	
+
     private ApplicationContext context;
-	
+
 	@FXML
 	private BorderPane mainPane;
 

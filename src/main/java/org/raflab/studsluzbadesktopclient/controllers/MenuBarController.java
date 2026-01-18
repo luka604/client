@@ -3,7 +3,6 @@ package org.raflab.studsluzbadesktopclient.controllers;
 import org.raflab.studsluzbadesktopclient.MainView;
 import org.raflab.studsluzbadesktopclient.services.StudentService;
 import org.springframework.stereotype.Component;
-
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuBar;
 
@@ -29,9 +28,7 @@ public class MenuBarController {
 		mainView.changeRoot("newStudent");
 	}
 
-	public void openEventsPage(){
-		mainView.changeRoot("events");
-	}
+	public void openEventsPage(){mainView.changeRoot("events");}
 
 	public void openReportsPage(){
 		mainView.changeRoot("reports");
@@ -65,9 +62,7 @@ public class MenuBarController {
 		mainView.changeRoot("studentProfil");
 	}
 
-	public void openPretragaStudenata() {
-		mainView.changeRoot("pretragaStudenata");
-	}
+	public void openPretragaStudenata() {mainView.changeRoot("pretragaStudenata");}
 
 	@FXML
     public void initialize() {

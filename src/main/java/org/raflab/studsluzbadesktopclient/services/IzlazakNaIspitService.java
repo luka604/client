@@ -14,16 +14,6 @@ public class IzlazakNaIspitService {
 
     private WebClient webClient;
 
-    public IzlazakNaIspitDTO unosIzlaska(IzlazakNaIspitRequestDTO dto) {
-        return webClient
-                .post()
-                .uri("/api/izlazak")
-                .bodyValue(dto)
-                .retrieve()
-                .bodyToMono(IzlazakNaIspitDTO.class)
-                .block();
-    }
-
     public Mono<IzlazakNaIspitDTO> unosIzlaskaAsync(IzlazakNaIspitRequestDTO dto) {
         return webClient
                 .post()
@@ -31,15 +21,6 @@ public class IzlazakNaIspitService {
                 .bodyValue(dto)
                 .retrieve()
                 .bodyToMono(IzlazakNaIspitDTO.class);
-    }
-
-    public BrojPolaganjaDTO getBrojPolaganja(String brojIndeksa, String predmetSifra) {
-        return webClient
-                .get()
-                .uri("/api/izlazak/broj-polaganja?brojIndeksa=" + brojIndeksa + "&predmetId=" + predmetSifra)
-                .retrieve()
-                .bodyToMono(BrojPolaganjaDTO.class)
-                .block();
     }
 
     public Mono<BrojPolaganjaDTO> getBrojPolaganjaAsync(String brojIndeksa, String predmetSifra) {

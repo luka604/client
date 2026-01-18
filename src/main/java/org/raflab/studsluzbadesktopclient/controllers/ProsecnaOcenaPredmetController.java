@@ -4,15 +4,17 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import lombok.Setter;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.view.JasperViewer;
 import dto.response.OcenaDistribucijaDTO;
 import dto.response.ProsecnaOcenaDTO;
 import org.raflab.studsluzbadesktopclient.services.PredmetService;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,9 +24,11 @@ import java.util.Map;
 @Component
 public class ProsecnaOcenaPredmetController {
 
-    private final PredmetService predmetService;
+    private PredmetService predmetService;
 
+    @Setter
     private static String predmetSifra;
+    @Setter
     private static String predmetNaziv;
 
     @FXML
@@ -49,14 +53,6 @@ public class ProsecnaOcenaPredmetController {
 
     public ProsecnaOcenaPredmetController(PredmetService predmetService) {
         this.predmetService = predmetService;
-    }
-
-    public static void setPredmetSifra(String sifra) {
-        predmetSifra = sifra;
-    }
-
-    public static void setPredmetNaziv(String naziv) {
-        predmetNaziv = naziv;
     }
 
     @FXML
@@ -123,6 +119,18 @@ public class ProsecnaOcenaPredmetController {
         }
 
         try {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Sacuvaj izvestaj");
+            fileChooser.setInitialFileName("prosecnaOcena_" + predmetSifra + ".pdf");
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF fajlovi", "*.pdf"));
+
+            Stage stage = (Stage) lblPredmetNaziv.getScene().getWindow();
+            File file = fileChooser.showSaveDialog(stage);
+
+            if (file == null) {
+                return;
+            }
+
             InputStream reportStream = getClass().getResourceAsStream("/reports/prosecnaOcena.jrxml");
             if (reportStream == null) {
                 showError("Izvestaj nije pronadjen.");
@@ -149,11 +157,21 @@ public class ProsecnaOcenaPredmetController {
 
             JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(distribucija);
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, dataSource);
-            JasperViewer.viewReport(jasperPrint, false);
+            JasperExportManager.exportReportToPdfFile(jasperPrint, file.getAbsolutePath());
+
+            showInfo("Izvestaj uspesno sacuvan: " + file.getAbsolutePath());
 
         } catch (JRException e) {
             showError("Greska pri generisanju izvestaja: " + e.getMessage());
         }
+    }
+
+    private void showInfo(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Uspeh");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     @FXML

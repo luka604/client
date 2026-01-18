@@ -1,5 +1,6 @@
 package org.raflab.studsluzbadesktopclient.navigation;
 
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +13,7 @@ public class NavigationHistory {
     private final Deque<String> backStack = new ArrayDeque<>();
     private final Deque<String> forwardStack = new ArrayDeque<>();
     private String currentPage = null;
+    @Setter
     private String selectedBrojIndeksa = null;
 
     @Value("${navigation.history.max-depth:10}")
@@ -46,38 +48,14 @@ public class NavigationHistory {
         return currentPage;
     }
 
+
+
     public boolean canGoBack() {
         return !backStack.isEmpty();
     }
 
     public boolean canGoForward() {
         return !forwardStack.isEmpty();
-    }
-
-    public String getCurrentPage() {
-        return currentPage;
-    }
-
-    public int getBackStackSize() {
-        return backStack.size();
-    }
-
-    public int getForwardStackSize() {
-        return forwardStack.size();
-    }
-
-    public void clear() {
-        backStack.clear();
-        forwardStack.clear();
-        currentPage = null;
-    }
-
-    public String getSelectedBrojIndeksa() {
-        return selectedBrojIndeksa;
-    }
-
-    public void setSelectedBrojIndeksa(String brojIndeksa) {
-        this.selectedBrojIndeksa = brojIndeksa;
     }
 
     public String consumeSelectedBrojIndeksa() {

@@ -6,16 +6,14 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import dto.response.StudentPodaciDTO;
 import org.raflab.studsluzbadesktopclient.MainView;
-import org.raflab.studsluzbadesktopclient.navigation.NavigationHistory;
 import org.raflab.studsluzbadesktopclient.services.StudentPodaciService;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PretragaStudenataController {
 
-    private final StudentPodaciService studentPodaciService;
-    private final MainView mainView;
-    private final NavigationHistory navigationHistory;
+    private StudentPodaciService studentPodaciService;
+    private MainView mainView;
 
     private int currentPage = 0;
     private int totalPages = 0;
@@ -43,56 +41,14 @@ public class PretragaStudenataController {
     private Label statusLabel;
 
     public PretragaStudenataController(StudentPodaciService studentPodaciService,
-                                        MainView mainView,
-                                        NavigationHistory navigationHistory) {
+                                        MainView mainView) {
         this.studentPodaciService = studentPodaciService;
         this.mainView = mainView;
-        this.navigationHistory = navigationHistory;
     }
 
     @FXML
     public void initialize() {
         // Initial load
-    }
-
-    @FXML
-    public void handlePretraga() {
-        currentIme = imeTf.getText();
-        currentPrezime = prezimeTf.getText();
-        currentPage = 0;
-
-        if ((currentIme == null || currentIme.isEmpty()) && (currentPrezime == null || currentPrezime.isEmpty())) {
-            currentIme = null;
-            currentPrezime = null;
-        }
-
-        loadStudenti();
-    }
-
-    @FXML
-    public void handlePretragaPoSrednjojSkoli() {
-        String nazivSkole = srednjaSkolaNazivTf.getText();
-        if (nazivSkole == null || nazivSkole.trim().isEmpty()) {
-            showError("Molimo unesite naziv srednje skole.");
-            return;
-        }
-
-        studentPodaciService.getStudentiBySrednjaSkolaNazivAsync(nazivSkole.trim())
-                .collectList()
-                .subscribe(
-                        studenti -> Platform.runLater(() -> {
-                            tabelaStudenti.setItems(FXCollections.observableArrayList(studenti));
-                            statusLabel.setText("Pronadjeno " + studenti.size() + " studenata iz skole: " + nazivSkole);
-                            statusLabel.setStyle("-fx-text-fill: green;");
-                            lblPage.setText("Svi rezultati");
-                            totalPages = 1;
-                            currentPage = 0;
-                        }),
-                        error -> Platform.runLater(() -> {
-                            statusLabel.setText("Greska: " + error.getMessage());
-                            statusLabel.setStyle("-fx-text-fill: red;");
-                        })
-                );
     }
 
     private void loadStudenti() {
@@ -141,8 +97,48 @@ public class PretragaStudenataController {
             return;
         }
 
-        navigationHistory.setSelectedBrojIndeksa(selected.getBrojIndeksa());
+        StudentProfilController.setSelectedBrojIndeksa(selected.getBrojIndeksa());
         mainView.changeRoot("studentProfil");
+    }
+
+    @FXML
+    public void handlePretragaPoSrednjojSkoli() {
+        String nazivSkole = srednjaSkolaNazivTf.getText();
+        if (nazivSkole == null || nazivSkole.trim().isEmpty()) {
+            showError("Molimo unesite naziv srednje skole.");
+            return;
+        }
+
+        studentPodaciService.getStudentiBySrednjaSkolaNazivAsync(nazivSkole.trim())
+                .collectList()
+                .subscribe(
+                        studenti -> Platform.runLater(() -> {
+                            tabelaStudenti.setItems(FXCollections.observableArrayList(studenti));
+                            statusLabel.setText("Pronadjeno " + studenti.size() + " studenata iz skole: " + nazivSkole);
+                            statusLabel.setStyle("-fx-text-fill: green;");
+                            lblPage.setText("Svi rezultati");
+                            totalPages = 1;
+                            currentPage = 0;
+                        }),
+                        error -> Platform.runLater(() -> {
+                            statusLabel.setText("Greska: " + error.getMessage());
+                            statusLabel.setStyle("-fx-text-fill: red;");
+                        })
+                );
+    }
+
+    @FXML
+    public void handlePretraga() {
+        currentIme = imeTf.getText();
+        currentPrezime = prezimeTf.getText();
+        currentPage = 0;
+
+        if ((currentIme == null || currentIme.isEmpty()) && (currentPrezime == null || currentPrezime.isEmpty())) {
+            currentIme = null;
+            currentPrezime = null;
+        }
+
+        loadStudenti();
     }
 
     private void showError(String message) {
@@ -152,4 +148,5 @@ public class PretragaStudenataController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
 }

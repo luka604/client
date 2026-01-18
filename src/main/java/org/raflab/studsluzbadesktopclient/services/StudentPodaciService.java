@@ -20,17 +20,6 @@ public class StudentPodaciService {
 
     private WebClient webClient;
 
-    public StudentPodaciDTO getStudentByBrojIndeksa(String brojIndeksa) {
-        return webClient
-                .get()
-                .uri(uriBuilder -> uriBuilder
-                        .path("/api/student/indeks")
-                        .queryParam("brojIndeksa", brojIndeksa)
-                        .build())
-                .retrieve()
-                .bodyToMono(StudentPodaciDTO.class)
-                .block();
-    }
 
     public Mono<StudentPodaciDTO> getStudentByBrojIndeksaAsync(String brojIndeksa) {
         return webClient
@@ -60,14 +49,6 @@ public class StudentPodaciService {
                 })
                 .retrieve()
                 .bodyToMono(new ParameterizedTypeReference<PageResponse<StudentPodaciDTO>>() {});
-    }
-
-    public Flux<StudentPodaciDTO> getStudentiBySrednjaSkolaAsync(Long srednjaSkolaId) {
-        return webClient
-                .get()
-                .uri("/api/student/srednja-skola/{srednjaSkolaId}", srednjaSkolaId)
-                .retrieve()
-                .bodyToFlux(StudentPodaciDTO.class);
     }
 
     public Flux<StudentPodaciDTO> getStudentiBySrednjaSkolaNazivAsync(String nazivSkole) {

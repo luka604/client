@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import lombok.Setter;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.raflab.studsluzbadesktopclient.MainView;
@@ -31,7 +32,9 @@ public class RezultatiIspitaController {
     private final IspitniRokService ispitniRokService;
     private final MainView mainView;
 
+    @Setter
     private static Long selectedIspitId;
+    @Setter
     private static Long selectedIspitniRokId;
 
     @FXML
@@ -59,14 +62,6 @@ public class RezultatiIspitaController {
         this.ispitService = ispitService;
         this.ispitniRokService = ispitniRokService;
         this.mainView = mainView;
-    }
-
-    public static void setSelectedIspitId(Long id) {
-        selectedIspitId = id;
-    }
-
-    public static void setSelectedIspitniRokId(Long id) {
-        selectedIspitniRokId = id;
     }
 
     @FXML

@@ -5,6 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import lombok.Setter;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import dto.request.*;
@@ -24,6 +25,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
+@Setter
 public class StudentProfilController {
 
     private final StudentPodaciService studentPodaciService;
@@ -33,6 +35,8 @@ public class StudentProfilController {
     private final ObnovaGodineService obnovaGodineService;
     private final UplataService uplataService;
     private final PredmetService predmetService;
+    @Setter
+    private static String selectedBrojIndeksa;
     private final NavigationHistory navigationHistory;
 
     private String currentBrojIndeksa;
@@ -49,7 +53,7 @@ public class StudentProfilController {
     @FXML private Label statusLabel;
     @FXML private TabPane tabPane;
 
-    // Licni podaci
+
     @FXML private Label lblIme;
     @FXML private Label lblPrezime;
     @FXML private Label lblSrednjeIme;
@@ -61,29 +65,29 @@ public class StudentProfilController {
     @FXML private Label lblUkupnoEspbProfil;
     @FXML private Label lblProsecnaOcena;
 
-    // Polozeni ispiti
+
     @FXML private TableView<PolozeniPredmetDTO> tabelaPolozeni;
     @FXML private Label lblPagePolozeni;
 
-    // Nepolozeni ispiti
+
     @FXML private TableView<PredmetDTO> tabelaNepolozeni;
     @FXML private Label lblPageNepolozeni;
 
-    // Upisane godine
+
     @FXML private ListView<UpisGodineDTO> listaUpisaneGodine;
     @FXML private Spinner<Integer> spinnerGodina;
     @FXML private TextField upisNapomenaTf;
     @FXML private ListView<PredmetDTO> listaPredmetiZaUpis;
     @FXML private ListView<PredmetDTO> listaNoviPredmeti;
 
-    // Obnovljene godine
+
     @FXML private ListView<ObnovaGodineDTO> listaObnovljeneGodine;
     @FXML private Spinner<Integer> spinnerObnovaGodina;
     @FXML private TextField obnovaNapomenaTf;
     @FXML private ListView<PredmetDTO> listaPredmetiZaObnovu;
     @FXML private Label lblUkupnoEspb;
 
-    // Uplate
+
     @FXML private Label lblPreostaloEUR;
     @FXML private Label lblPreostaloRSD;
     @FXML private Label lblUkupnoUplaceno;
@@ -117,7 +121,6 @@ public class StudentProfilController {
         listaNoviPredmeti.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         listaPredmetiZaObnovu.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
-        // Load subjects for selected year when spinner changes
         spinnerGodina.valueProperty().addListener((obs, oldVal, newVal) -> {
             loadPredmetiZaGodinu(newVal);
         });
@@ -343,13 +346,13 @@ public class StudentProfilController {
         Integer godina = spinnerGodina.getValue();
         String napomena = upisNapomenaTf.getText();
 
-        // Get carried-over subjects (from failed/not-passed list)
+
         List<Long> preneseniPredmetiIds = listaPredmetiZaUpis.getSelectionModel().getSelectedItems()
                 .stream()
                 .map(PredmetDTO::getId)
                 .collect(Collectors.toList());
 
-        // Get new subjects for this year
+
         List<Long> noviPredmetiIds = listaNoviPredmeti.getSelectionModel().getSelectedItems()
                 .stream()
                 .map(PredmetDTO::getId)
@@ -383,7 +386,6 @@ public class StudentProfilController {
     private void loadPredmetiZaGodinu(Integer godina) {
         if (godina == null) return;
 
-        // Filter subjects by semester (year 1 = semesters 1-2, year 2 = semesters 3-4, etc.)
         int semestar1 = (godina - 1) * 2 + 1;
         int semestar2 = godina * 2;
 

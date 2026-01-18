@@ -18,50 +18,6 @@ public class IspitService {
 
     private WebClient webClient;
 
-    public List<IspitDTO> getAllIspiti() {
-        return webClient
-                .get()
-                .uri("/api/ispit")
-                .retrieve()
-                .bodyToFlux(IspitDTO.class)
-                .collectList()
-                .block();
-    }
-
-    public Flux<IspitDTO> getAllIspitiAsync() {
-        return webClient
-                .get()
-                .uri("/api/ispit")
-                .retrieve()
-                .bodyToFlux(IspitDTO.class);
-    }
-
-    public IspitDTO getById(Long id) {
-        return webClient
-                .get()
-                .uri("/api/ispit/{id}", id)
-                .retrieve()
-                .bodyToMono(IspitDTO.class)
-                .block();
-    }
-
-    public Mono<IspitDTO> getByIdAsync(Long id) {
-        return webClient
-                .get()
-                .uri("/api/ispit/{id}", id)
-                .retrieve()
-                .bodyToMono(IspitDTO.class);
-    }
-
-    public IspitDTO create(IspitRequestDTO dto) {
-        return webClient
-                .post()
-                .uri("/api/ispit")
-                .bodyValue(dto)
-                .retrieve()
-                .bodyToMono(IspitDTO.class)
-                .block();
-    }
 
     public Mono<IspitDTO> createAsync(IspitRequestDTO dto) {
         return webClient
@@ -70,25 +26,6 @@ public class IspitService {
                 .bodyValue(dto)
                 .retrieve()
                 .bodyToMono(IspitDTO.class);
-    }
-
-    public IspitDTO update(Long id, IspitRequestDTO dto) {
-        return webClient
-                .put()
-                .uri("/api/ispit/{id}", id)
-                .bodyValue(dto)
-                .retrieve()
-                .bodyToMono(IspitDTO.class)
-                .block();
-    }
-
-    public void delete(Long id) {
-        webClient
-                .delete()
-                .uri("/api/ispit/{id}", id)
-                .retrieve()
-                .bodyToMono(Void.class)
-                .block();
     }
 
     public ProsecnaOcenaDTO getProsecnaOcena(Long ispitId) {
@@ -100,16 +37,6 @@ public class IspitService {
                 .block();
     }
 
-    public List<RezultatIspitaDTO> getRezultatiIspita(Long ispitId) {
-        return webClient
-                .get()
-                .uri("/api/ispit/{ispitId}/rezultati", ispitId)
-                .retrieve()
-                .bodyToFlux(RezultatIspitaDTO.class)
-                .collectList()
-                .block();
-    }
-
     public Flux<RezultatIspitaDTO> getRezultatiIspitaAsync(Long ispitId) {
         return webClient
                 .get()
@@ -118,15 +45,6 @@ public class IspitService {
                 .bodyToFlux(RezultatIspitaDTO.class);
     }
 
-    public List<IspitDTO> getIspitiByIspitniRok(Long ispitniRokId) {
-        return webClient
-                .get()
-                .uri("/api/ispit?ispitniRokId=" + ispitniRokId)
-                .retrieve()
-                .bodyToFlux(IspitDTO.class)
-                .collectList()
-                .block();
-    }
 
     public Flux<IspitDTO> getIspitiByIspitniRokAsync(Long ispitniRokId) {
         return webClient

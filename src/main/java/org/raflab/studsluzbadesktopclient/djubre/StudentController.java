@@ -1,12 +1,9 @@
-package org.raflab.studsluzbadesktopclient.controllers;
+package org.raflab.studsluzbadesktopclient.djubre;
 
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
-import net.sf.jasperreports.engine.*;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.raflab.studsluzbadesktopclient.MainView;
 import org.raflab.studsluzbadesktopclient.coder.CoderFactory;
 import org.raflab.studsluzbadesktopclient.coder.CoderType;
@@ -15,7 +12,6 @@ import dto.response.SrednjaSkolaDTO;
 import dto.response.StudentDTO;
 import org.raflab.studsluzbadesktopclient.services.SifarniciService;
 import org.raflab.studsluzbadesktopclient.services.StudentService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.ZoneId;

@@ -17,20 +17,14 @@ public class IspitniRokoviController {
 
     @FXML
     private TableView<IspitniRokDTO> tabelaIspitniRokovi;
-
     @FXML
     private TextField nazivTf;
-
     @FXML
     private DatePicker pocetakDp;
-
     @FXML
     private DatePicker krajDp;
-
     @FXML
     private Label statusLabel;
-
-    private IspitniRokDTO selectedRok;
 
     public IspitniRokoviController(IspitniRokService ispitniRokService, MainView mainView) {
         this.ispitniRokService = ispitniRokService;
@@ -40,12 +34,6 @@ public class IspitniRokoviController {
     @FXML
     public void initialize() {
         loadIspitniRokovi();
-
-        tabelaIspitniRokovi.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            if (newSelection != null) {
-                selectedRok = newSelection;
-            }
-        });
     }
 
     private void loadIspitniRokovi() {
@@ -63,12 +51,13 @@ public class IspitniRokoviController {
 
     @FXML
     public void handlePrikaziIspite() {
-        if (selectedRok == null) {
+        IspitniRokDTO selected = tabelaIspitniRokovi.getSelectionModel().getSelectedItem();
+        if (selected == null) {
             showError("Molimo izaberite ispitni rok.");
             return;
         }
 
-        IspitiController.setSelectedIspitniRokId(selectedRok.getId());
+        IspitiController.setSelectedIspitniRokId(selected.getId());
         mainView.changeRoot("ispiti");
     }
 

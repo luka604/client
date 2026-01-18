@@ -30,38 +30,16 @@ public class StudentService {
 		return baseUrl + STUDENT_URL_PATH + "/" + pathEnd;
 	}
 
-	public List<StudentDTO> searchStudent(String ime) {
-		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(createURL("pronadji"));
-		builder.queryParam("ime", ime);
-		ResponseEntity<StudentDTO[]> response = restTemplate.getForEntity(builder.toUriString(), StudentDTO[].class, HttpMethod.GET);
-		if(response.getStatusCode() == HttpStatus.OK && response.getBody() != null)
-			return List.of(response.getBody());
-		else return null;
-	}
-
-	public List<StudentDTO> searchStudents(String ime) {
-		return webClient
-				.get()
-				.uri(uriBuilder -> uriBuilder
-						.path("student/pronadji")
-						.queryParam("ime", ime)
-						.build())
-				.retrieve()
-				.bodyToFlux(StudentDTO.class)
-				.collectList().block();
-	}
-
 	public Flux<StudentDTO> searchStudentsAsync(String ime) {
 		return webClient
 				.get()
 				.uri(uriBuilder -> uriBuilder
-						.path("/student/pronadji")
+						.path("/api/student/pronadji")
 						.queryParam("ime", ime)
 						.build())
 				.retrieve()
 				.bodyToFlux(StudentDTO.class);
 	}
-
 
 	public Integer saveStudent(StudentDTO student) {
 		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(createURL("add"));
@@ -75,7 +53,7 @@ public class StudentService {
 		return webClient
 				.get()
 				.uri(uriBuilder -> uriBuilder
-						.path("/student/all")
+						.path("/api/student/all")
 						.build())
 				.retrieve()
 				.bodyToFlux(StudentDTO.class)

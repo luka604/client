@@ -10,7 +10,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Rectangle?>
 <BorderPane fx:id="eventsPane" prefHeight="600" prefWidth="800" xmlns:fx="http://javafx.com/fxml"
-            fx:controller="org.raflab.studsluzbadesktopclient.controllers.EventsController">
+            fx:controller="org.raflab.studsluzbadesktopclient.djubre.EventsController">
     <top>
         <fx:include source="menuBar.fxml"/>
     </top>

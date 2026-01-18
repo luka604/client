@@ -11,7 +11,6 @@ import org.raflab.studsluzbadesktopclient.services.PredmetService;
 import org.raflab.studsluzbadesktopclient.services.StudijskiProgramService;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 
 @Component
 public class StudijskiProgramiController {
@@ -29,8 +28,6 @@ public class StudijskiProgramiController {
     @FXML
     private Label lblPredmetiNaslov;
 
-    private StudijskiProgramDTO selectedProgram;
-    private PredmetDTO selectedPredmet;
 
     public StudijskiProgramiController(StudijskiProgramService studijskiProgramService,
                                         PredmetService predmetService,
@@ -43,18 +40,6 @@ public class StudijskiProgramiController {
     @FXML
     public void initialize() {
         loadStudijskiProgrami();
-
-        tabelaStudijskiProgrami.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            if (newSelection != null) {
-                selectedProgram = newSelection;
-            }
-        });
-
-        tabelaPredmeti.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            if (newSelection != null) {
-                selectedPredmet = newSelection;
-            }
-        });
     }
 
     private void loadStudijskiProgrami() {
@@ -72,6 +57,9 @@ public class StudijskiProgramiController {
 
     @FXML
     public void handlePrikaziPredmete() {
+        StudijskiProgramDTO selectedProgram =
+                tabelaStudijskiProgrami.getSelectionModel().getSelectedItem();
+
         if (selectedProgram == null) {
             showError("Molimo izaberite studijski program.");
             return;
@@ -82,17 +70,20 @@ public class StudijskiProgramiController {
         predmetService.getPredmetiByStudijskiProgramAsync(selectedProgram.getOznaka())
                 .collectList()
                 .subscribe(
-                        predmeti -> Platform.runLater(() -> {
-                            tabelaPredmeti.setItems(FXCollections.observableArrayList(predmeti));
-                        }),
-                        error -> Platform.runLater(() -> {
-                            showError("Greska pri ucitavanju predmeta: " + error.getMessage());
-                        })
+                        predmeti -> Platform.runLater(() ->
+                                tabelaPredmeti.setItems(FXCollections.observableArrayList(predmeti))
+                        ),
+                        error -> Platform.runLater(() ->
+                                showError("Greska pri ucitavanju predmeta: " + error.getMessage())
+                        )
                 );
     }
 
     @FXML
     public void handleDodajPredmet() {
+        StudijskiProgramDTO selectedProgram =
+                tabelaStudijskiProgrami.getSelectionModel().getSelectedItem();
+
         if (selectedProgram == null) {
             showError("Molimo izaberite studijski program.");
             return;
@@ -100,11 +91,15 @@ public class StudijskiProgramiController {
 
         DodajPredmetController.setStudijskiProgramOznaka(selectedProgram.getOznaka());
         mainView.openModal("dodajPredmet", "Dodaj predmet na " + selectedProgram.getNaziv(), 450, 400);
+
         handlePrikaziPredmete();
     }
 
     @FXML
     public void handleProsecnaOcena() {
+        PredmetDTO selectedPredmet =
+                tabelaPredmeti.getSelectionModel().getSelectedItem();
+
         if (selectedPredmet == null) {
             showError("Molimo izaberite predmet.");
             return;

@@ -16,15 +16,6 @@ public class SlusaPredmetService {
 
     private WebClient webClient;
 
-    public SlusaPredmetDTO upisiStudentaNaPredmet(SlusaPredmetRequestDTO dto) {
-        return webClient
-                .post()
-                .uri("/api/slusa-predmet")
-                .bodyValue(dto)
-                .retrieve()
-                .bodyToMono(SlusaPredmetDTO.class)
-                .block();
-    }
 
     public Mono<SlusaPredmetDTO> upisiStudentaNaPredmetAsync(SlusaPredmetRequestDTO dto) {
         return webClient
@@ -35,15 +26,6 @@ public class SlusaPredmetService {
                 .bodyToMono(SlusaPredmetDTO.class);
     }
 
-    public List<SlusaPredmetDTO> getPredmetiZaStudenta(String brojIndeksa) {
-        return webClient
-                .get()
-                .uri("/api/slusa-predmet/{brojIndeksa}", brojIndeksa)
-                .retrieve()
-                .bodyToFlux(SlusaPredmetDTO.class)
-                .collectList()
-                .block();
-    }
 
     public Flux<SlusaPredmetDTO> getPredmetiZaStudentaAsync(String brojIndeksa) {
         return webClient

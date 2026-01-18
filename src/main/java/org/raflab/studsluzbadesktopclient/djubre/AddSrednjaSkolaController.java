@@ -1,4 +1,4 @@
-package org.raflab.studsluzbadesktopclient.controllers;
+package org.raflab.studsluzbadesktopclient.djubre;
 
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -23,7 +23,8 @@ public class AddSrednjaSkolaController {
 	@Autowired
 	SifarniciService sifarniciService;
 	
-	@Autowired StudentController  studentController;
+	@Autowired
+	StudentController studentController;
 	
 	@FXML TextField nazivNoveSrednjeSkoleTf;
 	@FXML ComboBox<SimpleCode> mestoNoveSrednjeSkoleCb;

@@ -17,15 +17,6 @@ public class PrijavaIspitaService {
 
     private WebClient webClient;
 
-    public PrijavaIspitaDTO prijavaIspita(PrijavaIspitaRequestDTO dto) {
-        return webClient
-                .post()
-                .uri("/api/prijava")
-                .bodyValue(dto)
-                .retrieve()
-                .bodyToMono(PrijavaIspitaDTO.class)
-                .block();
-    }
 
     public Mono<PrijavaIspitaDTO> prijavaIspitaAsync(PrijavaIspitaRequestDTO dto) {
         return webClient
@@ -34,16 +25,6 @@ public class PrijavaIspitaService {
                 .bodyValue(dto)
                 .retrieve()
                 .bodyToMono(PrijavaIspitaDTO.class);
-    }
-
-    public List<StudentPrijavaDTO> getPrijavljeniStudenti(Long ispitId) {
-        return webClient
-                .get()
-                .uri("/api/prijava/{ispitId}/prijavljeni-studenti", ispitId)
-                .retrieve()
-                .bodyToFlux(StudentPrijavaDTO.class)
-                .collectList()
-                .block();
     }
 
     public Flux<StudentPrijavaDTO> getPrijavljeniStudentiAsync(Long ispitId) {

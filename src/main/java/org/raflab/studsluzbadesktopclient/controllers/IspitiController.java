@@ -13,19 +13,18 @@ import org.raflab.studsluzbadesktopclient.services.IspitService;
 import org.raflab.studsluzbadesktopclient.services.IspitniRokService;
 import org.raflab.studsluzbadesktopclient.services.PredmetService;
 import org.springframework.stereotype.Component;
-
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.List;
+
 
 @Component
 public class IspitiController {
 
-    private final IspitService ispitService;
-    private final IspitniRokService ispitniRokService;
-    private final PredmetService predmetService;
-    private final MainView mainView;
+    private IspitService ispitService;
+    private IspitniRokService ispitniRokService;
+    private PredmetService predmetService;
+    private MainView mainView;
 
     private static Long selectedIspitniRokId;
 
@@ -47,7 +46,6 @@ public class IspitiController {
     @FXML
     private Label statusLabel;
 
-    private IspitDTO selectedIspit;
 
     public IspitiController(IspitService ispitService, IspitniRokService ispitniRokService,
                             PredmetService predmetService, MainView mainView) {
@@ -57,20 +55,11 @@ public class IspitiController {
         this.mainView = mainView;
     }
 
-    public static void setSelectedIspitniRokId(Long id) {
-        selectedIspitniRokId = id;
-    }
 
     @FXML
     public void initialize() {
         loadIspitniRokovi();
         loadPredmeti();
-
-        tabelaIspiti.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            if (newSelection != null) {
-                selectedIspit = newSelection;
-            }
-        });
     }
 
     private void loadIspitniRokovi() {
@@ -131,26 +120,31 @@ public class IspitiController {
 
     @FXML
     public void handlePrijavljeniStudenti() {
-        if (selectedIspit == null) {
-            showError("Molimo izaberite ispit.");
-            return;
-        }
+        IspitniRokDTO rok = requireSelectedRok();
+        if (rok == null) return;
+
+        IspitDTO selectedIspit = requireSelectedIspit();
+        if (selectedIspit == null) return;
 
         PrijavljeniStudentiController.setIspitId(selectedIspit.getId());
         PrijavljeniStudentiController.setIspitNaziv(selectedIspit.getPredmetNaziv());
-        PrijavljeniStudentiController.setIspitniRokId(ispitniRokCombo.getValue().getId());
-        mainView.openModal("prijavljeniStudenti", "Prijavljeni studenti - " + selectedIspit.getPredmetNaziv(), 600, 500);
+        PrijavljeniStudentiController.setIspitniRokId(rok.getId());
+
+        mainView.openModal(
+                "prijavljeniStudenti",
+                "Prijavljeni studenti - " + selectedIspit.getPredmetNaziv(),
+                600, 500
+        );
     }
 
     @FXML
     public void handleRezultati() {
-        if (selectedIspit == null) {
-            showError("Molimo izaberite ispit.");
-            return;
-        }
-
+        IspitniRokDTO rok = requireSelectedRok();
+        if (rok == null) return;
+        IspitDTO selectedIspit = requireSelectedIspit();
+        if (selectedIspit == null) return;
         RezultatiIspitaController.setSelectedIspitId(selectedIspit.getId());
-        RezultatiIspitaController.setSelectedIspitniRokId(ispitniRokCombo.getValue().getId());
+        RezultatiIspitaController.setSelectedIspitniRokId(rok.getId());
         mainView.changeRoot("rezultatiIspita");
     }
 
@@ -206,6 +200,26 @@ public class IspitiController {
         predmetCombo.setValue(null);
         datumDp.setValue(null);
         vremeTf.clear();
+    }
+
+    private IspitniRokDTO requireSelectedRok() {
+        IspitniRokDTO rok = ispitniRokCombo.getValue();
+        if (rok == null) {
+            showError("Molimo izaberite ispitni rok.");
+        }
+        return rok;
+    }
+
+    private IspitDTO requireSelectedIspit() {
+        IspitDTO selected = tabelaIspiti.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            showError("Molimo izaberite ispit.");
+        }
+        return selected;
+    }
+
+    public static void setSelectedIspitniRokId(Long id) {
+        selectedIspitniRokId = id;
     }
 
     private void showError(String message) {

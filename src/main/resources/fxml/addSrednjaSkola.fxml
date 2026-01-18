@@ -3,7 +3,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
 
-<GridPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" alignment="center" hgap="10" vgap="10" fx:controller="org.raflab.studsluzbadesktopclient.controllers.AddSrednjaSkolaController">
+<GridPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" alignment="center" hgap="10" vgap="10" fx:controller="org.raflab.studsluzbadesktopclient.djubre.AddSrednjaSkolaController">
 	 
          	<Label text="Naziv škole" GridPane.halignment="RIGHT" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
 		   	<TextField fx:id="nazivNoveSrednjeSkoleTf"  GridPane.columnIndex="1" GridPane.rowIndex="0"/>

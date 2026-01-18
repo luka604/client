@@ -31,7 +31,6 @@ public class SifarniciService {
 				.block();
 	}
 
-
 	public List<SrednjaSkolaDTO> getSrednjeSkole() throws Exception{
 
 		return webClient.get()

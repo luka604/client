@@ -25,6 +25,8 @@ module stud_sluzba_desktop_client {
     opens org.raflab.studsluzbadesktopclient.coder to javafx.fxml, spring.beans, spring.context, spring.core;
     exports org.raflab.studsluzbadesktopclient.navigation;
     opens org.raflab.studsluzbadesktopclient.navigation to javafx.fxml, spring.beans, spring.context, spring.core;
+    exports org.raflab.studsluzbadesktopclient.djubre;
+    opens org.raflab.studsluzbadesktopclient.djubre to javafx.fxml, spring.beans, spring.core;
 
     //reports
     requires java.sql;

@@ -14,15 +14,6 @@ public class PredIspitneObavezeService {
 
     private WebClient webClient;
 
-    public List<PredispitniPoeniDTO> getPredispitniPoeni(String brojIndeksa, Long predmetId, Long skolskaGodinaId) {
-        return webClient
-                .get()
-                .uri("/api/obaveze?brojIndeksa=" + brojIndeksa + "&predmetId=" + predmetId + "&skolskaGodinaId=" + skolskaGodinaId)
-                .retrieve()
-                .bodyToFlux(PredispitniPoeniDTO.class)
-                .collectList()
-                .block();
-    }
 
     public Flux<PredispitniPoeniDTO> getPredispitniPoeniAsync(String brojIndeksa, Long predmetId, Long skolskaGodinaId) {
         return webClient

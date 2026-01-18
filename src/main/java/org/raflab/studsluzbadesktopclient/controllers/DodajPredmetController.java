@@ -5,49 +5,38 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import dto.request.PredmetRequestDTO;
+import lombok.Setter;
 import org.raflab.studsluzbadesktopclient.services.PredmetService;
 import org.springframework.stereotype.Component;
 
 @Component
 public class DodajPredmetController {
-
     private final PredmetService predmetService;
-
-    private static String studijskiProgramOznaka;
 
     @FXML
     private TextField sifraTf;
-
     @FXML
     private TextField nazivTf;
-
     @FXML
     private TextArea opisTa;
-
     @FXML
     private TextField espbTf;
-
     @FXML
     private TextField semestarTf;
-
     @FXML
     private TextField fondPredavanjaTf;
-
     @FXML
     private TextField fondVezbiTf;
-
     @FXML
     private CheckBox obavezanCb;
-
     @FXML
     private Label errorLabel;
 
+    @Setter
+    private static String studijskiProgramOznaka;
+
     public DodajPredmetController(PredmetService predmetService) {
         this.predmetService = predmetService;
-    }
-
-    public static void setStudijskiProgramOznaka(String oznaka) {
-        studijskiProgramOznaka = oznaka;
     }
 
     @FXML

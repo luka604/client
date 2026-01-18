@@ -7,6 +7,7 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import dto.request.*;
 import dto.response.*;
+import lombok.Setter;
 import org.raflab.studsluzbadesktopclient.services.IzlazakNaIspitService;
 import org.raflab.studsluzbadesktopclient.services.PrijavaIspitaService;
 import org.springframework.stereotype.Component;
@@ -14,14 +15,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class PrijavljeniStudentiController {
 
-    private final PrijavaIspitaService prijavaIspitaService;
-    private final IzlazakNaIspitService izlazakNaIspitService;
+    private PrijavaIspitaService prijavaIspitaService;
+    private IzlazakNaIspitService izlazakNaIspitService;
 
+    @Setter
     private static Long ispitId;
+    @Setter
     private static String ispitNaziv;
+    @Setter
     private static Long ispitniRokId;
-
-    private StudentPrijavaDTO selectedStudent;
 
     @FXML
     private Label lblNaslov;
@@ -47,28 +49,10 @@ public class PrijavljeniStudentiController {
         this.izlazakNaIspitService = izlazakNaIspitService;
     }
 
-    public static void setIspitId(Long id) {
-        ispitId = id;
-    }
-
-    public static void setIspitNaziv(String naziv) {
-        ispitNaziv = naziv;
-    }
-
-    public static void setIspitniRokId(Long id) {
-        ispitniRokId = id;
-    }
-
     @FXML
     public void initialize() {
         lblNaslov.setText("Prijavljeni studenti za ispit: " + ispitNaziv);
         loadPrijavljeniStudenti();
-
-        tabelaPrijavljeni.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            if (newSelection != null) {
-                selectedStudent = newSelection;
-            }
-        });
     }
 
     private void loadPrijavljeniStudenti() {
@@ -114,6 +98,7 @@ public class PrijavljeniStudentiController {
 
     @FXML
     public void handleUnosIzlaska() {
+        StudentPrijavaDTO selectedStudent = tabelaPrijavljeni.getSelectionModel().getSelectedItem();
         if (selectedStudent == null) {
             showError("Molimo selektujte studenta iz tabele.");
             return;

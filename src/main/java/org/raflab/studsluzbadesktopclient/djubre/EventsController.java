@@ -1,4 +1,4 @@
-package org.raflab.studsluzbadesktopclient.controllers;
+package org.raflab.studsluzbadesktopclient.djubre;
 
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;

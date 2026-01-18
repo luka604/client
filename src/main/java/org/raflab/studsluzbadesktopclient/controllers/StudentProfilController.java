@@ -7,7 +7,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import org.raflab.studsluzbadesktopclient.dtos.*;
+import dto.request.*;
+import dto.response.*;
+import org.raflab.studsluzbadesktopclient.dtos.PolozeniPredmetReportDTO;
+import org.raflab.studsluzbadesktopclient.navigation.NavigationHistory;
 import org.raflab.studsluzbadesktopclient.services.*;
 import org.springframework.stereotype.Component;
 
@@ -30,6 +33,7 @@ public class StudentProfilController {
     private final ObnovaGodineService obnovaGodineService;
     private final UplataService uplataService;
     private final PredmetService predmetService;
+    private final NavigationHistory navigationHistory;
 
     private String currentBrojIndeksa;
     private int pagePolozeni = 0;
@@ -54,6 +58,8 @@ public class StudentProfilController {
     @FXML private Label lblTelefon;
     @FXML private Label lblUspehSrednjaSkola;
     @FXML private Label lblUspehPrijemni;
+    @FXML private Label lblUkupnoEspbProfil;
+    @FXML private Label lblProsecnaOcena;
 
     // Polozeni ispiti
     @FXML private TableView<PolozeniPredmetDTO> tabelaPolozeni;
@@ -68,6 +74,7 @@ public class StudentProfilController {
     @FXML private Spinner<Integer> spinnerGodina;
     @FXML private TextField upisNapomenaTf;
     @FXML private ListView<PredmetDTO> listaPredmetiZaUpis;
+    @FXML private ListView<PredmetDTO> listaNoviPredmeti;
 
     // Obnovljene godine
     @FXML private ListView<ObnovaGodineDTO> listaObnovljeneGodine;
@@ -89,7 +96,8 @@ public class StudentProfilController {
                                     UpisGodineService upisGodineService,
                                     ObnovaGodineService obnovaGodineService,
                                     UplataService uplataService,
-                                    PredmetService predmetService) {
+                                    PredmetService predmetService,
+                                    NavigationHistory navigationHistory) {
         this.studentPodaciService = studentPodaciService;
         this.polozeniPredmetService = polozeniPredmetService;
         this.studentPredmetService = studentPredmetService;
@@ -97,6 +105,7 @@ public class StudentProfilController {
         this.obnovaGodineService = obnovaGodineService;
         this.uplataService = uplataService;
         this.predmetService = predmetService;
+        this.navigationHistory = navigationHistory;
     }
 
     @FXML
@@ -105,13 +114,26 @@ public class StudentProfilController {
         spinnerObnovaGodina.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 4, 1));
 
         listaPredmetiZaUpis.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        listaNoviPredmeti.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         listaPredmetiZaObnovu.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+        // Load subjects for selected year when spinner changes
+        spinnerGodina.valueProperty().addListener((obs, oldVal, newVal) -> {
+            loadPredmetiZaGodinu(newVal);
+        });
 
         listaPredmetiZaObnovu.getSelectionModel().getSelectedItems().addListener((ListChangeListener<PredmetDTO>) c -> {
             updateEspbCount();
         });
 
         loadAllPredmeti();
+
+        // Check if navigated from search with pre-selected student
+        String selectedBrojIndeksa = navigationHistory.consumeSelectedBrojIndeksa();
+        if (selectedBrojIndeksa != null && !selectedBrojIndeksa.isEmpty()) {
+            brojIndeksaTf.setText(selectedBrojIndeksa);
+            handleUcitajStudenta();
+        }
     }
 
     private void loadAllPredmeti() {
@@ -121,6 +143,8 @@ public class StudentProfilController {
                         predmeti -> Platform.runLater(() -> {
                             allPredmeti = predmeti;
                             listaPredmetiZaObnovu.setItems(FXCollections.observableArrayList(predmeti));
+                            // Load subjects for the currently selected year
+                            loadPredmetiZaGodinu(spinnerGodina.getValue());
                         }),
                         error -> {}
                 );
@@ -144,6 +168,7 @@ public class StudentProfilController {
         loadUpisaneGodine();
         loadObnovljeneGodine();
         loadPreostaliIznos();
+        loadProsecnaOcenaAndEspb();
     }
 
     private void loadStudentData() {
@@ -244,6 +269,38 @@ public class StudentProfilController {
                 );
     }
 
+    private void loadProsecnaOcenaAndEspb() {
+        polozeniPredmetService.getAllPolozeniIspitiAsync(currentBrojIndeksa)
+                .collectList()
+                .subscribe(
+                        polozeniIspiti -> Platform.runLater(() -> {
+                            if (polozeniIspiti == null || polozeniIspiti.isEmpty()) {
+                                lblUkupnoEspbProfil.setText("0");
+                                lblProsecnaOcena.setText("-");
+                                return;
+                            }
+
+                            int ukupnoEspb = polozeniIspiti.stream()
+                                    .filter(p -> p.getPredmet() != null && p.getPredmet().getEspb() != null)
+                                    .mapToInt(p -> p.getPredmet().getEspb())
+                                    .sum();
+
+                            double prosecnaOcena = polozeniIspiti.stream()
+                                    .filter(p -> p.getOcena() != null && p.getOcena() >= 6)
+                                    .mapToInt(PolozeniPredmetDTO::getOcena)
+                                    .average()
+                                    .orElse(0.0);
+
+                            lblUkupnoEspbProfil.setText(String.valueOf(ukupnoEspb));
+                            lblProsecnaOcena.setText(String.format("%.2f", prosecnaOcena));
+                        }),
+                        error -> Platform.runLater(() -> {
+                            lblUkupnoEspbProfil.setText("-");
+                            lblProsecnaOcena.setText("-");
+                        })
+                );
+    }
+
     @FXML
     public void handlePreviousPolozeni() {
         if (pagePolozeni > 0) {
@@ -286,7 +343,14 @@ public class StudentProfilController {
         Integer godina = spinnerGodina.getValue();
         String napomena = upisNapomenaTf.getText();
 
-        List<Long> predmetiIds = listaPredmetiZaUpis.getSelectionModel().getSelectedItems()
+        // Get carried-over subjects (from failed/not-passed list)
+        List<Long> preneseniPredmetiIds = listaPredmetiZaUpis.getSelectionModel().getSelectedItems()
+                .stream()
+                .map(PredmetDTO::getId)
+                .collect(Collectors.toList());
+
+        // Get new subjects for this year
+        List<Long> noviPredmetiIds = listaNoviPredmeti.getSelectionModel().getSelectedItems()
                 .stream()
                 .map(PredmetDTO::getId)
                 .collect(Collectors.toList());
@@ -294,21 +358,41 @@ public class StudentProfilController {
         UpisGodineRequestDTO request = new UpisGodineRequestDTO();
         request.setGodinaKojuUpisuje(godina);
         request.setNapomena(napomena);
-        request.setPreneseniPredmetiIds(predmetiIds);
+        request.setPreneseniPredmetiIds(preneseniPredmetiIds);
+        request.setNoviPredmetiIds(noviPredmetiIds);
 
         upisGodineService.upisGodineAsync(currentBrojIndeksa, request)
                 .subscribe(
                         result -> Platform.runLater(() -> {
-                            statusLabel.setText("Godina uspesno upisana!");
+                            statusLabel.setText("Godina uspesno upisana sa " +
+                                (noviPredmetiIds.size() + preneseniPredmetiIds.size()) + " predmeta!");
                             statusLabel.setStyle("-fx-text-fill: green;");
                             loadUpisaneGodine();
+                            loadNepolozeniIspiti();
                             upisNapomenaTf.clear();
+                            listaNoviPredmeti.getSelectionModel().clearSelection();
+                            listaPredmetiZaUpis.getSelectionModel().clearSelection();
                         }),
                         error -> Platform.runLater(() -> {
                             statusLabel.setText("Greska: " + error.getMessage());
                             statusLabel.setStyle("-fx-text-fill: red;");
                         })
                 );
+    }
+
+    private void loadPredmetiZaGodinu(Integer godina) {
+        if (godina == null) return;
+
+        // Filter subjects by semester (year 1 = semesters 1-2, year 2 = semesters 3-4, etc.)
+        int semestar1 = (godina - 1) * 2 + 1;
+        int semestar2 = godina * 2;
+
+        List<PredmetDTO> predmetiZaGodinu = allPredmeti.stream()
+                .filter(p -> p.getSemestar() != null &&
+                        p.getSemestar() >= semestar1 && p.getSemestar() <= semestar2)
+                .collect(Collectors.toList());
+
+        listaNoviPredmeti.setItems(FXCollections.observableArrayList(predmetiZaGodinu));
     }
 
     @FXML

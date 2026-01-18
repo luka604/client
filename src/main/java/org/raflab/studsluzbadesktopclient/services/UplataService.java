@@ -1,9 +1,9 @@
 package org.raflab.studsluzbadesktopclient.services;
 
 import lombok.AllArgsConstructor;
-import org.raflab.studsluzbadesktopclient.dtos.PreostaliIznosDTO;
-import org.raflab.studsluzbadesktopclient.dtos.UplataDTO;
-import org.raflab.studsluzbadesktopclient.dtos.UplataRequestDTO;
+import dto.request.UplataRequestDTO;
+import dto.response.PreostaliIznosDTO;
+import dto.response.UplataDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;

@@ -1,7 +1,7 @@
 package org.raflab.studsluzbadesktopclient.services;
 
 import lombok.AllArgsConstructor;
-import org.raflab.studsluzbadesktopclient.dtos.SrednjaSkolaDTO;
+import dto.response.SrednjaSkolaDTO;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;

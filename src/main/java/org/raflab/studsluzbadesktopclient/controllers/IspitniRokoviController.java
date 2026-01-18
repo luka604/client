@@ -5,7 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import org.raflab.studsluzbadesktopclient.MainView;
-import org.raflab.studsluzbadesktopclient.dtos.IspitniRokDTO;
+import dto.response.IspitniRokDTO;
 import org.raflab.studsluzbadesktopclient.services.IspitniRokService;
 import org.springframework.stereotype.Component;
 

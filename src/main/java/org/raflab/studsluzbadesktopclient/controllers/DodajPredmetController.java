@@ -4,7 +4,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import org.raflab.studsluzbadesktopclient.dtos.PredmetRequestDTO;
+import dto.request.PredmetRequestDTO;
 import org.raflab.studsluzbadesktopclient.services.PredmetService;
 import org.springframework.stereotype.Component;
 

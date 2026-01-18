@@ -1,7 +1,7 @@
 package org.raflab.studsluzbadesktopclient.services;
 
 import lombok.AllArgsConstructor;
-import org.raflab.studsluzbadesktopclient.dtos.IspitniRokDTO;
+import dto.response.IspitniRokDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;

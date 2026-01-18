@@ -6,7 +6,14 @@
       "Bash(find:*)",
       "Bash(tree:*)",
       "Bash(cd:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(mvn clean install:*)",
+      "Bash(cmd /c \"cd /d C:\\\\Users\\\\lukal\\\\Desktop\\\\studsluzba-shared && mvn clean install -DskipTests\")",
+      "Bash(cmd /c \"where mvn\")",
+      "Bash(powershell -Command \"cd ''C:\\\\Users\\\\lukal\\\\Desktop\\\\studsluzba-shared''; mvn clean install -DskipTests\")",
+      "Bash(powershell -Command \"Set-Location ''C:\\\\Users\\\\lukal\\\\Desktop\\\\dto_shared''; mvn clean install -DskipTests\")",
+      "Bash(jar tf:*)",
+      "Bash(unzip:*)"
     ]
   }
 }

@@ -1,9 +1,9 @@
 package org.raflab.studsluzbadesktopclient.services;
 
 import lombok.AllArgsConstructor;
-import org.raflab.studsluzbadesktopclient.dtos.PredmetDTO;
-import org.raflab.studsluzbadesktopclient.dtos.PredmetRequestDTO;
-import org.raflab.studsluzbadesktopclient.dtos.ProsecnaOcenaDTO;
+import dto.request.PredmetRequestDTO;
+import dto.response.PredmetDTO;
+import dto.response.ProsecnaOcenaDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;

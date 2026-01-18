@@ -32,4 +32,5 @@ module stud_sluzba_desktop_client {
     requires spring.webflux;
 
     requires reactor.core;
+    requires dto.shared;
 }

@@ -8,8 +8,8 @@ import javafx.stage.Stage;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.view.JasperViewer;
-import org.raflab.studsluzbadesktopclient.dtos.OcenaDistribucijaDTO;
-import org.raflab.studsluzbadesktopclient.dtos.ProsecnaOcenaDTO;
+import dto.response.OcenaDistribucijaDTO;
+import dto.response.ProsecnaOcenaDTO;
 import org.raflab.studsluzbadesktopclient.services.PredmetService;
 import org.springframework.stereotype.Component;
 

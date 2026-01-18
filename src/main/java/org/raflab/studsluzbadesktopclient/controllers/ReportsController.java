@@ -5,7 +5,7 @@ import javafx.scene.control.TextField;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.raflab.studsluzbadesktopclient.MainView;
-import org.raflab.studsluzbadesktopclient.dtos.StudentDTO;
+import dto.response.StudentDTO;
 import org.raflab.studsluzbadesktopclient.services.StudentService;
 import org.springframework.stereotype.Component;
 

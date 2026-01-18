@@ -4,7 +4,9 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import org.raflab.studsluzbadesktopclient.dtos.StudentPodaciDTO;
+import dto.response.StudentPodaciDTO;
+import org.raflab.studsluzbadesktopclient.MainView;
+import org.raflab.studsluzbadesktopclient.navigation.NavigationHistory;
 import org.raflab.studsluzbadesktopclient.services.StudentPodaciService;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +14,8 @@ import org.springframework.stereotype.Component;
 public class PretragaStudenataController {
 
     private final StudentPodaciService studentPodaciService;
+    private final MainView mainView;
+    private final NavigationHistory navigationHistory;
 
     private int currentPage = 0;
     private int totalPages = 0;
@@ -27,7 +31,7 @@ public class PretragaStudenataController {
     private TextField prezimeTf;
 
     @FXML
-    private TextField srednjaSkolaIdTf;
+    private TextField srednjaSkolaNazivTf;
 
     @FXML
     private TableView<StudentPodaciDTO> tabelaStudenti;
@@ -38,8 +42,12 @@ public class PretragaStudenataController {
     @FXML
     private Label statusLabel;
 
-    public PretragaStudenataController(StudentPodaciService studentPodaciService) {
+    public PretragaStudenataController(StudentPodaciService studentPodaciService,
+                                        MainView mainView,
+                                        NavigationHistory navigationHistory) {
         this.studentPodaciService = studentPodaciService;
+        this.mainView = mainView;
+        this.navigationHistory = navigationHistory;
     }
 
     @FXML
@@ -62,27 +70,19 @@ public class PretragaStudenataController {
     }
 
     @FXML
-    public void handlePretragaPoBrojSrednje() {
-        String idStr = srednjaSkolaIdTf.getText();
-        if (idStr == null || idStr.trim().isEmpty()) {
-            showError("Molimo unesite ID srednje skole.");
+    public void handlePretragaPoSrednjojSkoli() {
+        String nazivSkole = srednjaSkolaNazivTf.getText();
+        if (nazivSkole == null || nazivSkole.trim().isEmpty()) {
+            showError("Molimo unesite naziv srednje skole.");
             return;
         }
 
-        Long srednjaSkolaId;
-        try {
-            srednjaSkolaId = Long.parseLong(idStr.trim());
-        } catch (NumberFormatException e) {
-            showError("ID srednje skole mora biti broj.");
-            return;
-        }
-
-        studentPodaciService.getStudentiBySrednjaSkolaAsync(srednjaSkolaId)
+        studentPodaciService.getStudentiBySrednjaSkolaNazivAsync(nazivSkole.trim())
                 .collectList()
                 .subscribe(
                         studenti -> Platform.runLater(() -> {
                             tabelaStudenti.setItems(FXCollections.observableArrayList(studenti));
-                            statusLabel.setText("Pronadjeno " + studenti.size() + " studenata.");
+                            statusLabel.setText("Pronadjeno " + studenti.size() + " studenata iz skole: " + nazivSkole);
                             statusLabel.setStyle("-fx-text-fill: green;");
                             lblPage.setText("Svi rezultati");
                             totalPages = 1;
@@ -126,6 +126,23 @@ public class PretragaStudenataController {
             currentPage++;
             loadStudenti();
         }
+    }
+
+    @FXML
+    public void handleOtvoriProfil() {
+        StudentPodaciDTO selected = tabelaStudenti.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            showError("Molimo izaberite studenta iz tabele.");
+            return;
+        }
+
+        if (selected.getBrojIndeksa() == null || selected.getBrojIndeksa().isEmpty()) {
+            showError("Izabrani student nema broj indeksa.");
+            return;
+        }
+
+        navigationHistory.setSelectedBrojIndeksa(selected.getBrojIndeksa());
+        mainView.changeRoot("studentProfil");
     }
 
     private void showError(String message) {

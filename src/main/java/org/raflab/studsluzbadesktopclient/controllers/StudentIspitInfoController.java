@@ -5,7 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import org.raflab.studsluzbadesktopclient.dtos.*;
+import dto.response.*;
 import org.raflab.studsluzbadesktopclient.services.*;
 import org.springframework.stereotype.Component;
 
@@ -78,7 +78,7 @@ public class StudentIspitInfoController {
                             skolskaGodinaCombo.setItems(FXCollections.observableArrayList(godine));
                             // Select active year by default
                             for (SkolskaGodinaDTO g : godine) {
-                                if (g.getAktivna() != null && g.getAktivna()) {
+                                if (g.isAktivna()) {
                                     skolskaGodinaCombo.setValue(g);
                                     break;
                                 }

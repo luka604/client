@@ -1,9 +1,9 @@
 package org.raflab.studsluzbadesktopclient.services;
 
 import lombok.AllArgsConstructor;
-import org.raflab.studsluzbadesktopclient.dtos.BrojPolaganjaDTO;
-import org.raflab.studsluzbadesktopclient.dtos.IzlazakNaIspitDTO;
-import org.raflab.studsluzbadesktopclient.dtos.IzlazakNaIspitRequestDTO;
+import dto.request.IzlazakNaIspitRequestDTO;
+import dto.response.BrojPolaganjaDTO;
+import dto.response.IzlazakNaIspitDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;

@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Objects;
 
 import lombok.AllArgsConstructor;
-import org.raflab.studsluzbadesktopclient.dtos.StudentDTO;
+import dto.response.StudentDTO;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;

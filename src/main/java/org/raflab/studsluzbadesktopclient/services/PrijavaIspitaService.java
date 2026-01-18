@@ -1,7 +1,9 @@
 package org.raflab.studsluzbadesktopclient.services;
 
 import lombok.AllArgsConstructor;
-import org.raflab.studsluzbadesktopclient.dtos.*;
+import dto.request.PrijavaIspitaRequestDTO;
+import dto.response.PrijavaIspitaDTO;
+import dto.response.StudentPrijavaDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;

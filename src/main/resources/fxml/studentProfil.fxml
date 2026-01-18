@@ -71,6 +71,14 @@
 
                     <Label text="Uspeh prijemni:" GridPane.rowIndex="7" GridPane.columnIndex="0"/>
                     <Label fx:id="lblUspehPrijemni" GridPane.rowIndex="7" GridPane.columnIndex="1" style="-fx-font-weight: bold;"/>
+
+                    <Separator GridPane.rowIndex="8" GridPane.columnIndex="0" GridPane.columnSpan="2"/>
+
+                    <Label text="Ukupno ESPB:" GridPane.rowIndex="9" GridPane.columnIndex="0" style="-fx-font-weight: bold;"/>
+                    <Label fx:id="lblUkupnoEspbProfil" GridPane.rowIndex="9" GridPane.columnIndex="1" style="-fx-font-weight: bold; -fx-text-fill: #2196F3; -fx-font-size: 14px;"/>
+
+                    <Label text="Prosecna ocena:" GridPane.rowIndex="10" GridPane.columnIndex="0" style="-fx-font-weight: bold;"/>
+                    <Label fx:id="lblProsecnaOcena" GridPane.rowIndex="10" GridPane.columnIndex="1" style="-fx-font-weight: bold; -fx-text-fill: #4CAF50; -fx-font-size: 14px;"/>
                 </GridPane>
             </VBox>
         </Tab>
@@ -132,7 +140,7 @@
         <!-- Tab 4: Upisane godine -->
         <Tab text="Upisane godine">
             <VBox spacing="10" style="-fx-padding: 10;">
-                <ListView fx:id="listaUpisaneGodine" prefHeight="200"/>
+                <ListView fx:id="listaUpisaneGodine" prefHeight="150"/>
 
                 <Separator/>
 
@@ -143,9 +151,19 @@
                     <Label text="Napomena:"/>
                     <TextField fx:id="upisNapomenaTf" prefWidth="200"/>
                 </HBox>
-                <Label text="Predmeti koje prenosi (izaberi iz liste nepolozenih):"/>
-                <ListView fx:id="listaPredmetiZaUpis" prefHeight="100"/>
-                <Button onAction="#handleUpisGodine" text="Upisi godinu"/>
+
+                <HBox spacing="20">
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <Label text="Novi predmeti za godinu (izaberi):"/>
+                        <ListView fx:id="listaNoviPredmeti" prefHeight="120"/>
+                    </VBox>
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <Label text="Predmeti koje prenosi (nepolozeni):"/>
+                        <ListView fx:id="listaPredmetiZaUpis" prefHeight="120"/>
+                    </VBox>
+                </HBox>
+
+                <Button onAction="#handleUpisGodine" text="Upisi godinu" style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
             </VBox>
         </Tab>
 

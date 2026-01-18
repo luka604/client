@@ -12,6 +12,7 @@ public class NavigationHistory {
     private final Deque<String> backStack = new ArrayDeque<>();
     private final Deque<String> forwardStack = new ArrayDeque<>();
     private String currentPage = null;
+    private String selectedBrojIndeksa = null;
 
     @Value("${navigation.history.max-depth:10}")
     private int maxHistoryDepth = 10;
@@ -69,5 +70,19 @@ public class NavigationHistory {
         backStack.clear();
         forwardStack.clear();
         currentPage = null;
+    }
+
+    public String getSelectedBrojIndeksa() {
+        return selectedBrojIndeksa;
+    }
+
+    public void setSelectedBrojIndeksa(String brojIndeksa) {
+        this.selectedBrojIndeksa = brojIndeksa;
+    }
+
+    public String consumeSelectedBrojIndeksa() {
+        String value = selectedBrojIndeksa;
+        selectedBrojIndeksa = null;
+        return value;
     }
 }

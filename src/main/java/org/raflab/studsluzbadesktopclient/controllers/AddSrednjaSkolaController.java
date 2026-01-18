@@ -11,7 +11,7 @@ import javafx.stage.Stage;
 import org.raflab.studsluzbadesktopclient.coder.CoderFactory;
 import org.raflab.studsluzbadesktopclient.coder.CoderType;
 import org.raflab.studsluzbadesktopclient.coder.SimpleCode;
-import org.raflab.studsluzbadesktopclient.dtos.SrednjaSkolaDTO;
+import dto.response.SrednjaSkolaDTO;
 import org.raflab.studsluzbadesktopclient.services.SifarniciService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

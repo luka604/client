@@ -3,8 +3,8 @@ package org.raflab.studsluzbadesktopclient.services;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
-import org.raflab.studsluzbadesktopclient.dtos.PageResponse;
-import org.raflab.studsluzbadesktopclient.dtos.StudentPodaciDTO;
+import dto.PageResponse;
+import dto.response.StudentPodaciDTO;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -66,6 +66,17 @@ public class StudentPodaciService {
         return webClient
                 .get()
                 .uri("/api/student/srednja-skola/{srednjaSkolaId}", srednjaSkolaId)
+                .retrieve()
+                .bodyToFlux(StudentPodaciDTO.class);
+    }
+
+    public Flux<StudentPodaciDTO> getStudentiBySrednjaSkolaNazivAsync(String nazivSkole) {
+        return webClient
+                .get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/api/student/srednja-skola")
+                        .queryParam("naziv", nazivSkole)
+                        .build())
                 .retrieve()
                 .bodyToFlux(StudentPodaciDTO.class);
     }

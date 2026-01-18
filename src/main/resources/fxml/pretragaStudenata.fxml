@@ -31,9 +31,9 @@
 
     <Label text="Pretraga po srednjoj skoli:" style="-fx-font-weight: bold;"/>
     <HBox spacing="10" alignment="CENTER_LEFT">
-        <Label text="ID srednje skole:"/>
-        <TextField fx:id="srednjaSkolaIdTf" prefWidth="100"/>
-        <Button onAction="#handlePretragaPoBrojSrednje" text="Pretrazi po srednjoj skoli"/>
+        <Label text="Naziv srednje skole:"/>
+        <TextField fx:id="srednjaSkolaNazivTf" prefWidth="200" promptText="npr. Gimnazija"/>
+        <Button onAction="#handlePretragaPoSrednjojSkoli" text="Pretrazi po srednjoj skoli"/>
     </HBox>
 
     <Separator/>
@@ -42,26 +42,32 @@
 
     <TableView fx:id="tabelaStudenti" prefHeight="400">
         <columns>
-            <TableColumn prefWidth="120" text="Ime">
+            <TableColumn prefWidth="100" text="Broj indeksa">
+                <cellValueFactory><PropertyValueFactory property="brojIndeksa"/></cellValueFactory>
+            </TableColumn>
+            <TableColumn prefWidth="100" text="Ime">
                 <cellValueFactory><PropertyValueFactory property="ime"/></cellValueFactory>
             </TableColumn>
-            <TableColumn prefWidth="120" text="Prezime">
+            <TableColumn prefWidth="100" text="Prezime">
                 <cellValueFactory><PropertyValueFactory property="prezime"/></cellValueFactory>
             </TableColumn>
-            <TableColumn prefWidth="100" text="Srednje ime">
+            <TableColumn prefWidth="80" text="Srednje ime">
                 <cellValueFactory><PropertyValueFactory property="srednjeIme"/></cellValueFactory>
             </TableColumn>
-            <TableColumn prefWidth="200" text="Email">
+            <TableColumn prefWidth="180" text="Email">
                 <cellValueFactory><PropertyValueFactory property="email"/></cellValueFactory>
             </TableColumn>
-            <TableColumn prefWidth="120" text="Telefon">
+            <TableColumn prefWidth="100" text="Telefon">
                 <cellValueFactory><PropertyValueFactory property="brojTelefonaMobilni"/></cellValueFactory>
             </TableColumn>
-            <TableColumn prefWidth="80" text="Uspeh SS">
+            <TableColumn prefWidth="70" text="Uspeh SS">
                 <cellValueFactory><PropertyValueFactory property="uspehSrednjaSkola"/></cellValueFactory>
             </TableColumn>
         </columns>
     </TableView>
+
+    <Button onAction="#handleOtvoriProfil" text="Otvori profil izabranog studenta"
+            style="-fx-background-color: #2196F3; -fx-text-fill: white;"/>
 
     <HBox spacing="10" alignment="CENTER">
         <Button onAction="#handlePrevious" text="Prethodna"/>

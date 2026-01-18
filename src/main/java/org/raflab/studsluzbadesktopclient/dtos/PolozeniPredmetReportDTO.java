@@ -1,5 +1,6 @@
 package org.raflab.studsluzbadesktopclient.dtos;
 
+import dto.response.PolozeniPredmetDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

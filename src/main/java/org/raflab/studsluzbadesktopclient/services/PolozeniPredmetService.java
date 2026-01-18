@@ -1,8 +1,8 @@
 package org.raflab.studsluzbadesktopclient.services;
 
 import lombok.AllArgsConstructor;
-import org.raflab.studsluzbadesktopclient.dtos.PageResponse;
-import org.raflab.studsluzbadesktopclient.dtos.PolozeniPredmetDTO;
+import dto.PageResponse;
+import dto.response.PolozeniPredmetDTO;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;

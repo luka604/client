@@ -5,7 +5,7 @@ import java.util.List;
 
 
 import lombok.AllArgsConstructor;
-import org.raflab.studsluzbadesktopclient.dtos.StudProgramDTO;
+import dto.response.StudProgramDTO;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 

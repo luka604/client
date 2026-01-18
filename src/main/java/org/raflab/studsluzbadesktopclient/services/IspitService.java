@@ -1,7 +1,10 @@
 package org.raflab.studsluzbadesktopclient.services;
 
 import lombok.AllArgsConstructor;
-import org.raflab.studsluzbadesktopclient.dtos.*;
+import dto.request.IspitRequestDTO;
+import dto.response.IspitDTO;
+import dto.response.ProsecnaOcenaDTO;
+import dto.response.RezultatIspitaDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
